@@ -1,0 +1,16 @@
+--TEST--
+milestone1
+--TEMPLATE--
+<html>
+<body>
+<h1>{{$bar}}</h1>
+</body>
+</html>
+--DATA--
+return array('bar'=>'Hello World');
+--EXPECT--
+<html>
+<body>
+<h1>Hello World</h1>
+</body>
+</html>
