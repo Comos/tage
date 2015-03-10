@@ -17,27 +17,37 @@ class Token
     const TYPE_TAG_START=7;//ex {{
     const TYPE_TAG_END=8;//ex }}
     const TYPE_TEXT=9;//ex <html></html>
+    const TYPE_PHP_CODE=10;//ex <?php xxx
     const TYPE_EOF=-1;//the end token
 
     /**
      * @param $type int
      * @param $value string
      * @param $line int
+     * @param $col int
      */
-    public function __construct($type,$value,$line)
+    public function __construct($type,$value,$line,$col)
     {
         $this->type=$type;
         $this->value=$value;
         $this->line=$line;
+        $this->col=$col;
     }
 
     /**
-     * @var string
+     * @var int
      * 记录模板源码行
      */
     public $line;
+
     /**
-     * @var string
+     * @var int
+     * 记录模板源码列
+     */
+    public $col;
+
+    /**
+     * @var int
      * 类型
      */
     public $type;

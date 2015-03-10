@@ -4,9 +4,9 @@
  * Date: 15-3-7
  * Time: 上午4:24
  */
-namespace Etag\Node\Expression\Operator\Binary;
+namespace Etag\Compiler\Node\Expression\Operator\Binary;
 
-use Etag\Node\Expression\BinaryNode;
+use Etag\Compiler\Node\Expression\BinaryNode;
 
 class AddNode extends BinaryNode
 {

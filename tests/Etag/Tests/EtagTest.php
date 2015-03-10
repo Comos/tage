@@ -6,9 +6,13 @@
  */
 namespace Etag\Tests;
 
+use Etag\Autoloader;
 use Etag\Compiler\Token;
+use Etag\Compiler\TokenStream;
 use Etag\Etag;
+require_once __DIR__.'/../../../src/Etag/Autoloader.php';
 
+Autoloader::register();
 class TokenBuilder
 {
     public $tokens;
@@ -26,8 +30,8 @@ class TokenBuilder
 
     public function build()
     {
-        $this->tokens[]=new Token(Token::TYPE_EOF,'',-1);
-        return $this->tokens;
+        $this->tokens[]=new Token(Token::TYPE_EOF,'',-1,-1);
+        return new TokenStream($this->tokens);
     }
 
 }

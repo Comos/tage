@@ -4,12 +4,12 @@
  * Date: 15-3-7
  * Time: 上午4:18
  */
-namespace Etag\Node;
+namespace Etag\Compiler\Node;
 
 /**
  * Class AbstractNode
  * Node为Parser解析后得到的语法节点(树)，它将转换为等效的php代码。
- * @package Etag\Node
+ * @package Etag\Compiler\Compiler\Node
  */
 abstract class AbstractNode
 {

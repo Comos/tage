@@ -4,10 +4,10 @@
  * Date: 15-3-7
  * Time: 上午4:16
  */
-namespace Etag\Parser;
+namespace Etag\Compiler\Parser;
 
 use Etag\Compiler\TokenStream;
-use Etag\Node\Expression\ExpressionNode;
+use Etag\Compiler\Node\Expression\ExpressionNode;
 
 /**
  * Class ExpressionParser

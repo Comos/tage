@@ -6,7 +6,11 @@
  */
 namespace Etag\Compiler;
 
-class CompileException extends \Exception
-{
+use Etag\EtagException;
 
+class CompileException extends EtagException
+{
+    public function __construct($message,$line,$col){
+        parent::__construct(sprintf('EtagError(%s,%s):%s',$line,$col,$message));
+    }
 }

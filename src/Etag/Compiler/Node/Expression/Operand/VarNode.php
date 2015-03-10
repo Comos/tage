@@ -4,9 +4,9 @@
  * Date: 15-3-7
  * Time: 上午4:34
  */
-namespace Etag\Node\Expression\Operand;
+namespace Etag\Compiler\Node\Expression\Operand;
 
-use Etag\Node\AbstractNode;
+use Etag\Compiler\Node\AbstractNode;
 
 class VarNode extends AbstractNode
 {

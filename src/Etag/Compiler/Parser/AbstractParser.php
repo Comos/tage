@@ -4,10 +4,10 @@
  * Date: 15-3-7
  * Time: 上午5:21
  */
-namespace Etag\Parser;
+namespace Etag\Compiler\Parser;
 
 use Etag\Compiler\TokenStream;
-use Etag\Node\AbstractNode;
+use Etag\Compiler\Node\AbstractNode;
 
 class AbstractParser
 {
