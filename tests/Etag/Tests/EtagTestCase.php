@@ -6,33 +6,7 @@
  */
 namespace Etag\Tests;
 
-use Etag\Autoloader;
-use Etag\Compiler\Token;
-use Etag\Compiler\TokenStream;
 use Etag\Etag;
-
-class TokenBuilder
-{
-    public $tokens;
-
-    public static function begin()
-    {
-        return new TokenBuilder();
-    }
-
-    public function append($token)
-    {
-        $this->tokens[]=$token;
-        return $this;
-    }
-
-    public function build()
-    {
-        $this->tokens[]=new Token(Token::TYPE_EOF,'',-1,-1);
-        return new TokenStream($this->tokens,'default');
-    }
-
-}
 
 class EtagTestCase extends  \PHPUnit_Framework_TestCase
 {

@@ -58,7 +58,20 @@ class Token
      * 字面值
      */
     public $value;
-
+    
+    /**
+     * @return string
+     */
+    public function getTypename() {
+        return self::typeToString($this->type);
+    }
+    
+    /**
+     * 
+     * @param integer $type
+     * @throws EtagException
+     * @return mixed
+     */
     public static function typeToString($type)
     {
         $rc = new \ReflectionClass(self::class);
