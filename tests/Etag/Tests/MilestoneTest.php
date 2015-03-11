@@ -6,7 +6,7 @@
  */
 namespace Etag\Tests;
 
-class MilestoneTest extends EtagTest
+class MilestoneTest extends EtagTestCase
 {
     public function testMilestones()
     {

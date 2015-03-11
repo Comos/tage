@@ -8,11 +8,10 @@ namespace Etag\Tests\Compiler;
 
 use Etag\Compiler\Lexer;
 use Etag\Compiler\Token;
-use Etag\Tests\EtagTest;
+use Etag\Tests\EtagTestCase;
 use Etag\Tests\TokenBuilder;
-require_once __DIR__ . '/../EtagTest.php';
 
-class LexTest extends EtagTest
+class LexTest extends EtagTestCase
 {
     public function lexProvider()
     {

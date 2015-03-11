@@ -34,7 +34,7 @@ class TokenBuilder
 
 }
 
-class EtagTest extends  \PHPUnit_Framework_TestCase
+class EtagTestCase extends  \PHPUnit_Framework_TestCase
 {
     public function runFixtureTest($path)
     {
