@@ -27,6 +27,7 @@ class Lexer
     private static $NAME_CHARS=[];
     private static $PUNCTUATIONS=[];
     private static $OPERATORS=[];
+    private static $NUMBER_CHARS=[];
 
     public function __construct()
     {
@@ -39,6 +40,7 @@ class Lexer
         //$var.name func() func(p1,p2)
         self::$PUNCTUATIONS = str_split('(){}.,|');
         self::$OPERATORS=array_merge(str_split('+-*/%='),['==','>','<','>=','<=','&&','||']);
+        self::$NUMBER_CHARS = str_split('0123456789');
     }
 
 
@@ -145,7 +147,7 @@ class Lexer
             else if($this->test(["'",'"'])){
                 $this->tokens[]=$this->lexString();
             }
-            else if($this->test(range('0','9'))){ //Number
+            else if($this->test(self::$NUMBER_CHARS)){ //Number
                 $this->tokens[]=$this->lexNumber();
             }
             else if($this->test(self::$OPERATORS)){
@@ -159,17 +161,51 @@ class Lexer
 
     public function lexOperator()
     {
-        //TODO
+        $start=$this->cursor;
+        $line=$this->line;
+        $col=$this->col;
+        if($this->test(self::$OPERATORS)){
+            $this->forward();
+        }
+        return new Token(Token::TYPE_OPERATOR,$this->sub_str($start,$this->cursor-1),$line,$col);
     }
 
     public function lexPunctuation()
     {
-        //TODO
+        $start=$this->cursor;
+        $line=$this->line;
+        $col=$this->col;
+        if($this->test(self::$PUNCTUATIONS)){
+            $this->forward();
+        }
+        return new Token(Token::TYPE_PUNCTUATION,$this->sub_str($start,$this->cursor-1),$line,$col);
     }
 
     public function lexNumber()
     {
-        //TODO
+        $start=$this->cursor;
+        $line=$this->line;
+        $col=$this->col;
+        $isEPreNumber=false;
+        while($this->test(self::$NUMBER_CHARS)){
+            $this->forward();
+            $isEPreNumber=true;
+        }
+        if($this->test('.')){
+            $isEPreNumber=false;
+            $this->forward();
+            while($this->test(self::$NUMBER_CHARS)){
+                $this->forward();
+                $isEPreNumber=true;
+            }
+        }
+        if($this->test('e') && $isEPreNumber){
+            $this->forward();
+            while($this->test(self::$NUMBER_CHARS)){
+                $this->forward();
+            }
+        }
+        return new Token(Token::TYPE_NUMBER,$this->sub_str($start,$this->cursor-1),$line,$col);
     }
 
     public function lexName()
@@ -184,7 +220,7 @@ class Lexer
             if($this->test(self::$NAME_CHARS)){
                 $this->forward();
             }else{
-                return new Token(Token::TYPE_VARIABLE,$this->sub_str($start,$this->cursor-1),$line,$col);
+                return new Token(Token::TYPE_NAME,$this->sub_str($start,$this->cursor-1),$line,$col);
             }
         }
     }
@@ -214,7 +250,8 @@ class Lexer
             }
             if($this->test($quote)){
                 //end string
-                return new Token(Token::TYPE_STRING,$this->sub_str($start,$this->cursor-1),$line,$col);
+                $this->forward();
+                return new Token(Token::TYPE_STRING,$this->sub_str($start,$this->cursor-2),$line,$col);
             }
             $this->forward();
         }
