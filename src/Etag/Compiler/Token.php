@@ -6,6 +6,8 @@
  */
 namespace Etag\Compiler;
 
+use Etag\EtagException;
+
 class Token
 {
     const TYPE_NUMBER=1;//ex 1 1.2 1e10
@@ -56,4 +58,34 @@ class Token
      * 字面值
      */
     public $value;
+
+    public static function typeToString($type)
+    {
+        switch($type){
+            case Token::TYPE_NUMBER:
+                return "TYPE_NUMBER";
+            case Token::TYPE_STRING:
+                return "TYPE_STRING";
+            case Token::TYPE_VARIABLE:
+                return "TYPE_VARIABLE";
+            case Token::TYPE_NAME:
+                return "TYPE_NAME";
+            case Token::TYPE_PUNCTUATION:
+                return "TYPE_PUNCTUATION";
+            case Token::TYPE_OPERATOR:
+                return "TYPE_OPERATOR";
+            case Token::TYPE_TAG_START:
+                return "TYPE_TAG_START";
+            case Token::TYPE_TAG_END:
+                return "TYPE_TAG_END";
+            case Token::TYPE_TEXT:
+                return "TYPE_TEXT";
+            case Token::TYPE_PHP_CODE:
+                return "TYPE_PHP_CODE";
+            case Token::TYPE_EOF:
+                return "TYPE_EOF";
+            default:
+                throw new EtagException(sprintf('Token of type %s does not exist.', $type));
+        }
+    }
 }

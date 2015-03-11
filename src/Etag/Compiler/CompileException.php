@@ -10,7 +10,7 @@ use Etag\EtagException;
 
 class CompileException extends EtagException
 {
-    public function __construct($message,$line,$col){
-        parent::__construct(sprintf('EtagError(%s,%s):%s',$line,$col,$message));
+    public function __construct($filename,$message,$line,$col){
+        parent::__construct(sprintf('EtagError(%s,%s) at %s:%s',$line,$col,$filename,$message));
     }
 }

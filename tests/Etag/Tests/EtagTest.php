@@ -31,7 +31,7 @@ class TokenBuilder
     public function build()
     {
         $this->tokens[]=new Token(Token::TYPE_EOF,'',-1,-1);
-        return new TokenStream($this->tokens);
+        return new TokenStream($this->tokens,'default');
     }
 
 }

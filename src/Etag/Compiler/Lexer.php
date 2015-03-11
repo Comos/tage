@@ -19,6 +19,7 @@ class Lexer
     protected $length;
     protected $col;
     protected $code;
+    protected $filename;
 //    protected $chars;
     protected $tokens;
 
@@ -47,7 +48,7 @@ class Lexer
      * @param options array 配置信息
      * @return TokenStream
      */
-    public function lex($tplCode,$options=array()){
+    public function lex($tplCode,$filename="default",$options=array()){
         //shutdown mbstring overload
         if (function_exists('mb_internal_encoding') && ((int) ini_get('mbstring.func_overload')) & 2) {
             $mbEncoding = mb_internal_encoding();
@@ -60,7 +61,7 @@ class Lexer
         }
 
         //canonicalCode
-        $this->code = str_replace("\r\n", "\n",$tplCode);
+        $this->code = str_replace(array("\r\n","\r"), "\n",$tplCode);
         //UTF8 can safe compatible ascii
 //        $this->chars=preg_split('/(?<!^)(?!$)/u', $tplCode );//split multibyte string
         $this->length = strlen($this->code);
@@ -80,7 +81,7 @@ class Lexer
             mb_internal_encoding($mbEncoding);
         }
 
-        return new TokenStream($this->tokens);
+        return new TokenStream($this->tokens,$filename);
     }
 
     /**
@@ -118,7 +119,7 @@ class Lexer
         $this->skip(strlen('{{'));
         while(true){
             if($this->cursor>=$this->length){
-                throw new CompileException('Tag not closed',$this->line,$this->col);
+                throw new CompileException($this->filename,'Tag not closed',$this->line,$this->col);
             }
             //skip space
             while($this->test([' ',"\n"])){
@@ -151,7 +152,7 @@ class Lexer
                 $this->tokens[]=$this->lexOperator();
             }
             else{
-                throw new CompileException('Invalid token',$this->line,$this->col);
+                throw new CompileException($this->filename,'Invalid token',$this->line,$this->col);
             }
         }
     }
