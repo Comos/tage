@@ -8,15 +8,15 @@ namespace Etag;
 
 class Etag
 {
-    public function __construct($options=array())
-    {
+	/**
+	 * @var \Etag\Runtime\TplPreparer
+	 */
+	private $tplPreparer;
+	
+    public function __construct($options=array()) {
+    	//new \Etag\Runtime\FsBasedTplPreparer();
     }
-
-    public function setTplLoader($loader)
-    {
-        //TODO add string tpl loader
-    }
-
+    
     /**
      * @param $name
      * @param $vars
@@ -24,7 +24,11 @@ class Etag
      */
     public function display($name,$vars)
     {
-
+        try {
+        	
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
     }
 
 }
