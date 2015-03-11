@@ -61,31 +61,12 @@ class Token
 
     public static function typeToString($type)
     {
-        switch($type){
-            case Token::TYPE_NUMBER:
-                return "TYPE_NUMBER";
-            case Token::TYPE_STRING:
-                return "TYPE_STRING";
-            case Token::TYPE_VARIABLE:
-                return "TYPE_VARIABLE";
-            case Token::TYPE_NAME:
-                return "TYPE_NAME";
-            case Token::TYPE_PUNCTUATION:
-                return "TYPE_PUNCTUATION";
-            case Token::TYPE_OPERATOR:
-                return "TYPE_OPERATOR";
-            case Token::TYPE_TAG_START:
-                return "TYPE_TAG_START";
-            case Token::TYPE_TAG_END:
-                return "TYPE_TAG_END";
-            case Token::TYPE_TEXT:
-                return "TYPE_TEXT";
-            case Token::TYPE_PHP_CODE:
-                return "TYPE_PHP_CODE";
-            case Token::TYPE_EOF:
-                return "TYPE_EOF";
-            default:
-                throw new EtagException(sprintf('Token of type %s does not exist.', $type));
+        $rc = new \ReflectionClass(self::class);
+        $constants = $rc->getConstants();
+        $key = array_search($type, $constants, true);
+        if (false ===  $key || strpos($key, 'TYPE_') !== 0) {
+            throw new EtagException(sprintf('Token of type %s does not exist.', $type));
         }
+        return $key;
     }
 }

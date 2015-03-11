@@ -14,7 +14,7 @@ class Autoloader
 
     static public function autoload($class)
     {
-        if (0 !== strpos($class, 'Etag')) {
+        if (0 !== strpos($class, 'Etag\\')) {
             return;
         }
 

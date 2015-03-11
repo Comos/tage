@@ -10,9 +10,7 @@ use Etag\Autoloader;
 use Etag\Compiler\Token;
 use Etag\Compiler\TokenStream;
 use Etag\Etag;
-require_once __DIR__.'/../../../src/Etag/Autoloader.php';
 
-Autoloader::register();
 class TokenBuilder
 {
     public $tokens;
