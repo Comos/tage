@@ -1,1 +1,3 @@
-# Tage - PHP compiling templating engine
+# Tage - The Compiling Template Engine
+
+PHP web development toolkit.
