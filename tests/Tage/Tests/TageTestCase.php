@@ -20,6 +20,7 @@ class TageTestCase extends  \PHPUnit_Framework_TestCase
         foreach($fixtureLines as $line){
             if(in_array($line,$justDirectives)){
                 $lastDirective=$line;
+                $parseConfig[$lastDirective] = '';
             }
             if($lastDirective){
                 $parseConfig[$lastDirective].=$line."\n";

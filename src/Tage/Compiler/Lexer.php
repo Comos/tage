@@ -22,6 +22,13 @@ class Lexer
     protected $filename;
 //    protected $chars;
     protected $tokens;
+    protected $options;
+
+    private static $DEFAULT_OPTIONS=array(
+        'short_open_tag'=>false,//XXX should we support different php tag styles? http://php.net/manual/zh/language.basic-syntax.phpmode.php
+        'check_php_syntax'=>true,
+        'asp_tags'=>false,
+    );
 
     private static $NAME_HEAD_CHARS=[];
     private static $NAME_CHARS=[];
@@ -48,6 +55,8 @@ class Lexer
      * 分词并生成Token流
      * @param tplCode string 模板代码
      * @param options array 配置信息
+     * options:
+     * 'short_open_tag':
      * @return TokenStream
      */
     public function lex($tplCode,$filename="default",$options=array()){
@@ -70,6 +79,7 @@ class Lexer
 
         $this->cursor=0;
         $this->line=1;$this->col=1;
+        $this->options=array_merge($options,self::$DEFAULT_OPTIONS);
 
         $this->tokens=[];
 
@@ -99,7 +109,7 @@ class Lexer
                 $this->tokens[]=new Token(Token::TYPE_TEXT,$this->sub_str($start,$this->cursor-1),$line,$col);
                 break;
             }
-            $lexPHPCode = $this->test('<?php');
+            $lexPHPCode = $this->test(['<?php','<?=']);
             $lexTag = $this->test('{{');
             if($this->cursor>$start && ($lexPHPCode || $lexTag)){
                 $this->tokens[]=new Token(Token::TYPE_TEXT,$this->sub_str($start,$this->cursor-1),$line,$col);

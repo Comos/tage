@@ -74,7 +74,7 @@ class Token
      */
     public static function typeToString($type)
     {
-        $rc = new \ReflectionClass(self::class);
+        $rc = new \ReflectionClass(__CLASS__);
         $constants = $rc->getConstants();
         $key = array_search($type, $constants, true);
         if (false ===  $key || strpos($key, 'TYPE_') !== 0) {
