@@ -1,5 +1,5 @@
 {
-    "name": "comos/etag",
+    "name": "comos/tage",
     "description": "PHP compiling templating engine",
     "keywords": ["templating", "template"],
     "homepage": "http://github.com/Comos/etag",
@@ -7,10 +7,10 @@
     "license": "GPL-3",
     "authors": [
         {
-            "name": "Alex Chao"
+            "name": "Feng Wang"
         },
         {
-            "name": "Feng Wang"
+            "name": "Alex Chao"
         }
     ],
     "require": {
@@ -20,7 +20,7 @@
         "phpunit/phpunit": "~4.0"
     },
     "autoload": {
-        "psr-4": {"Etag\\": ["src/Etag", "tests/Etag"]}
+        "psr-4": {"Tage\\": ["src/Tage", "tests/Tage"]}
     },
     "scripts": {
         "test": "phpunit"
