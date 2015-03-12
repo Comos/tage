@@ -2,14 +2,14 @@
 
 <phpunit bootstrap="bootstrap.php" colors="true">
     <testsuites>
-        <testsuite name="Etag Test Suite">
-            <directory>tests/Etag/</directory>
+        <testsuite name="Tage Test Suite">
+            <directory>tests/Tage/</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory suffix=".php">src/Etag/</directory>
+            <directory suffix=".php">src/Tage/</directory>
         </whitelist>
     </filter>
 </phpunit>

@@ -7,15 +7,15 @@
  *
  * User: 13leaf
  */
-require_once join(DIRECTORY_SEPARATOR,[__DIR__,'..','src','Etag','Autoloader.php']);
-\Etag\Autoloader::register();
+require_once join(DIRECTORY_SEPARATOR,[__DIR__,'..','src','Tage','Autoloader.php']);
+\Tage\Autoloader::register();
 $code = isset($_REQUEST['code'])?$_REQUEST['code']:'{{"Hello world"}}';
 ?>
 
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Etag Lexer Demo</title>
+    <title>Tage Lexer Demo</title>
 <style>
     form{
         padding:40px;
@@ -95,29 +95,29 @@ $code = isset($_REQUEST['code'])?$_REQUEST['code']:'{{"Hello world"}}';
 </head>
 <body>
 <form method="post">
-    <h1>Etag Lexer Demo</h1>
+    <h1>Tage Lexer Demo</h1>
     <pre class="code">
     <div class="line-number"></div>
 <?php
 if(!empty($code)){
     try{
-    $lexer = new \Etag\Compiler\Lexer();
-    $tokenStream=$lexer->lex($code,'EtagLexerDemoCode');
+    $lexer = new \Tage\Compiler\Lexer();
+    $tokenStream=$lexer->lex($code,'TageLexerDemoCode');
     $defaultTypeStringMap=array(
-        \Etag\Compiler\Token::TYPE_TAG_START=>'{{',
-        \Etag\Compiler\Token::TYPE_TAG_END=>"}}",
-        \Etag\Compiler\Token::TYPE_TEXT=>' '
+        \Tage\Compiler\Token::TYPE_TAG_START=>'{{',
+        \Tage\Compiler\Token::TYPE_TAG_END=>"}}",
+        \Tage\Compiler\Token::TYPE_TEXT=>' '
     );
     $lastLine=0;
     $lastToken=null;
     while(!$tokenStream->isEOF()){
         $token=$tokenStream->next();
-        $type = \Etag\Compiler\Token::typeToString($token->type);
+        $type = \Tage\Compiler\Token::typeToString($token->type);
         $val = trim($token->value);
         if(empty($val)){
             $val = $defaultTypeStringMap[$token->type];
         }
-        if($token->type == \Etag\Compiler\Token::TYPE_STRING){
+        if($token->type == \Tage\Compiler\Token::TYPE_STRING){
             $val="'$val'";
         }
         $lineNumber = '';
