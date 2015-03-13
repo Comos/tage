@@ -5,7 +5,7 @@
  */
 namespace Tage\Runtime;
 
-class FailToPrepareTplException extends \Exception
+class FailToPrepareTplException extends Exception
 {
 
 }

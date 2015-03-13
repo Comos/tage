@@ -8,22 +8,42 @@ namespace Tage\Runtime;
 class FsBasedTplPreparer implements TplPreparer
 {
 
-    private $_tplDir;
+    /**
+     *
+     * @var string
+     */
+    private $tplDir;
 
-    private $_compiledTplDir;
+    /**
+     *
+     * @var string
+     */
+    private $compiledTplDir;
 
-    public function __construct($config)
+    /**
+     *
+     * @var \Tage\Compiler\Compiler
+     */
+    private $compiler;
+
+    /**
+     *
+     * @param array $options            
+     * @param \Tage\Compiler\Compiler $compiler            
+     */
+    public function __construct($options, \Tage\Compiler\Compiler $compiler)
     {
-        $conf = \Tage\Util\Config::fromArray($config);
-        $this->_tplDir = $conf->rstr('tplDir');
-        $this->_compiledTplDir = $conf->str('compiledTplDir', null, true);
+        $conf = \Tage\Util\Config::fromArray($options);
+        $this->tplDir = $conf->rstr('tplDir');
+        $this->compiledTplDir = $conf->str('compiledTplDir', null, true);
+        $this->compiler = $compiler;
     }
 
     /**
      *
      * @see \Tage\Runtime\TplPreparer::prepare()
      */
-    public function prepare($name, \Tage\Compiler\Compiler $compiler = null)
+    public function prepare($name)
     {
         $sourceFile = $this->getSourceFile($name);
         $targetFile = $this->getTargetFile($name);
@@ -32,7 +52,7 @@ class FsBasedTplPreparer implements TplPreparer
             return $targetFile;
         }
         $source = $tpl->loadSource();
-        $tpl->writeTarget($compiler->compile($source));
+        $tpl->writeTarget($this->compiler->compile($source));
         return $targetFile;
     }
 }
