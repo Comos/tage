@@ -10,11 +10,9 @@ interface TplPreparer
 
     /**
      *
-     * @param string $name            
-     * @param \Tage\Compiler\Compiler
+     * @param string $name
      * @throws \Tage\Runtime\FailToLoadTplException
-     * @return string URI to compiled code
-     *         do load tpl source
+     * @return \Tage\Runtime\AbstractTemplate
      */
     public function prepare($name);
 }

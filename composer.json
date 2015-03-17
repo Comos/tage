@@ -2,7 +2,7 @@
     "name": "comos/tage",
     "description": "PHP compiling templating engine",
     "keywords": ["templating", "template"],
-    "homepage": "http://github.com/Comos/etag",
+    "homepage": "http://github.com/Comos/tage",
     "type": "library",
     "license": "GPL-3",
     "authors": [

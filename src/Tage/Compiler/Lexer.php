@@ -20,7 +20,7 @@ class Lexer
     protected $col;
     protected $code;
     protected $filename;
-//    protected $chars;
+//  protected $chars;
     protected $tokens;
     protected $options;
 

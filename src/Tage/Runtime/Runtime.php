@@ -13,8 +13,7 @@ class Runtime
 
     public function displayWithoutOB($template, $data = [])
     {
-        $target = $this->tplPreparer->prepare($template);
-        $this->runTemplate($target, $data);
+        $this->tplPreparer->prepare($template)->run($data);
     }
 
     public function fetch($template, $data = [])
@@ -34,11 +33,5 @@ class Runtime
     public function display($template, $data = [])
     {
         echo $this->fetch($template, $data);
-    }
-
-    protected function runTemplate($target, $data)
-    {
-        extract($data);
-        include $target;
     }
 }

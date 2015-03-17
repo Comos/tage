@@ -45,15 +45,25 @@ class FsBasedTplPreparer implements TplPreparer
      */
     public function prepare($name)
     {
-        $sourceFile = $this->getSourceFile($name);
-        $targetFile = $this->getTargetFile($name);
-        $tpl = new FsBasedTpl($sourceFile, $targetFile);
-        if ($tpl->checkTarget()) {
-            return $targetFile;
+        $clazz = self::nameToClass($name);
+        if (! \class_exists($clazz)) {
+            
+            $sourceFile = $this->getSourceFile($name);
+            $targetFile = $this->getTargetFile($name);
+            $tpl = new FsBasedTpl($sourceFile, $targetFile);
+            if ($tpl->checkTarget()) {
+                return $targetFile;
+            }
+            $source = $tpl->loadSource();
+            $tpl->writeTarget($this->compiler->compile($source));
+            include $targetFile;
         }
-        $source = $tpl->loadSource();
-        $tpl->writeTarget($this->compiler->compile($source));
-        return $targetFile;
+        return new $clazz();
+    }
+
+    private static function nameToClass($name)
+    {
+        return '_Tage_Compiled_Tpl_' . \md5($name);
     }
 }
 
