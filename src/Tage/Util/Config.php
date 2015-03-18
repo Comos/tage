@@ -57,8 +57,10 @@ class Config
      */
     public function rstr($key)
     {
-    	if (is_null($this->str($key))) {
+        $value = $this->str($key);
+    	if (is_null($value)) {
     		throw new ConfigException('miss required field: '.$key);
     	}
+    	return $value;
     }
 }

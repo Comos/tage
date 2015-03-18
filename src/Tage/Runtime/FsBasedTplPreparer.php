@@ -35,7 +35,7 @@ class FsBasedTplPreparer implements TplPreparer
     {
         $conf = \Tage\Util\Config::fromArray($options);
         $this->tplDir = $conf->rstr('tplDir');
-        $this->compiledTplDir = $conf->str('compiledTplDir', null, true);
+        $this->compiledTplDir = $conf->rstr('compiledTplDir');
         $this->compiler = $compiler;
     }
 
@@ -59,6 +59,16 @@ class FsBasedTplPreparer implements TplPreparer
             include $targetFile;
         }
         return new $clazz();
+    }
+    
+    protected function getSourceFile($name)
+    {
+        return $this->tplDir.'/'.$name;
+    }
+    
+    protected function getTargetFile($name)
+    {
+        return $this->compiledTplDir.'/'.$name.'.php';
     }
 
     private static function nameToClass($name)
