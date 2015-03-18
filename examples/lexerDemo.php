@@ -117,9 +117,9 @@ if(!empty($code)){
         if(empty($val)){
             $val = $defaultTypeStringMap[$token->type];
         }
-        if($token->type == \Tage\Compiler\Token::TYPE_STRING){
-            $val="'$val'";
-        }
+//        if($token->type == \Tage\Compiler\Token::TYPE_STRING){
+//            $val="'$val'";
+//        }
         $lineNumber = '';
         if($lastLine != $token->line){
             $val = "\n" .$val;

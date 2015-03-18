@@ -4,7 +4,7 @@
  */
 namespace Tage\Runtime;
 
-class AbstractTemplate
+abstract class AbstractTemplate
 {
 
     /**

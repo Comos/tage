@@ -4,12 +4,14 @@
  */
 namespace Tage\Compiler;
 
+use Tage\Compiler\Node\AbstractNode;
+
 class Compiler {
 	/**
-	 * @param string $sourceCode
+	 * @param AbstractNode $sourceCode
 	 * @return string target codes 
 	 */
-    public function compile($sourceCode) {
+    public function compile($node) {
         return '';
     }
 }
