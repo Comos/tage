@@ -109,6 +109,9 @@ class Lexer
      */
     public function nextToken()
     {
+        while($this->test([' ',"\n","\t"])){
+            $this->skip(1);
+        }
         $start=$this->cursor;
         $col=$this->col;
         $line=$this->line;
@@ -142,7 +145,7 @@ class Lexer
                 throw new CompileException($this->filename,'Tag not closed',$this->line,$this->col);
             }
             //skip space
-            while($this->test([' ',"\n"])){
+            while($this->test([' ',"\n","\t"])){
                 $this->forward();
             }
 

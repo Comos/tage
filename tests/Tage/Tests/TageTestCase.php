@@ -6,7 +6,7 @@
  */
 namespace Tage\Tests;
 
-use Tage\Compiler\Parser\TagParser;
+use Tage\Compiler\Parser\Parser;
 use Tage\Tage;
 
 class TageTestCase extends  \PHPUnit_Framework_TestCase

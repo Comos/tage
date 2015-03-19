@@ -23,6 +23,6 @@ class PHPCodeNode extends AbstractNode
         if(!preg_match('/.*\?\>\s*/',$phpCode)){
             $phpCode.=" ?>";
         }
-        return $phpCode;
+        return "\n".$phpCode;
     }
 }

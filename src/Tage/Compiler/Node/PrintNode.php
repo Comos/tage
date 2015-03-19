@@ -21,8 +21,7 @@ class PrintNode extends AbstractNode
         if(isset($this->tokens['text'])){
             return sprintf("\necho <<<'TEXT'
 %s
-TEXT;
-", $this->tokens['text']->getValue());
+TEXT;", $this->tokens['text']->getValue());
         }else{
             return sprintf("\necho %s;",$this->childNodes['expression']->compile());
         }
