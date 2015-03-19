@@ -31,10 +31,16 @@ class FsBasedTplPreparerTest extends \PHPUnit_Framework_TestCase
         $files = [];
         foreach($di as $file)
         {
-            if (strlen($file->getRealPath()) <= strlen($this->compiledTplDir) || strpos($file->getRealPath(), 'README.md'))
+            if (\strlen($file->getRealPath()) <= \strlen($this->compiledTplDir))
             {
                 continue;
             }
+            
+            if (\strpos($file->getRealPath(), 'README.md'))
+            {
+                continue;
+            }
+            
             if ($file->isDir())
             {
                 $dirs[] = $file->getRealPath();
@@ -44,7 +50,7 @@ class FsBasedTplPreparerTest extends \PHPUnit_Framework_TestCase
         }
         foreach (array_merge($files, $dirs) as $f)
         {
-            \unlink($file);
+            \unlink($f);
         }
         parent::tearDown();
     }
