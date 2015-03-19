@@ -5,6 +5,7 @@
  * Time: 上午4:18
  */
 namespace Tage\Compiler\Node;
+use Tage\Compiler\Token;
 
 /**
  * Class AbstractNode
@@ -14,9 +15,21 @@ namespace Tage\Compiler\Node;
 abstract class AbstractNode
 {
     /**
+     * @var Token[] tokens
+     */
+    public $tokens;
+
+    /**
      * @var AbstractNode[] 子节点
      */
     public $childNodes;
+
+    public function __construct(array $tokens,array $childNodes=[])
+    {
+        $this->tokens=$tokens;
+        $this->childNodes=$childNodes;
+    }
+
 
     /**
      * 将语法节点等效映射到php代码。该转换过程是递归的
@@ -25,4 +38,5 @@ abstract class AbstractNode
     public function compile(){
 
     }
+
 }

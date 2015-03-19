@@ -60,40 +60,48 @@ class Lexer
      * @return TokenStream
      */
     public function lex($tplCode,$filename="default",$options=array()){
-        //shutdown mbstring overload
-        if (function_exists('mb_internal_encoding') && ((int) ini_get('mbstring.func_overload')) & 2) {
-            $mbEncoding = mb_internal_encoding();
-            mb_internal_encoding('ASCII');
-        }
-        if(function_exists('mb_detect_encoding')){
-            if(mb_detect_encoding($tplCode,'utf-8,ascii,iso-8859-1') === false){
-                throw new TageException('must use ascii compatible encoding');
+        try{
+            //shutdown mbstring overload
+            if (function_exists('mb_internal_encoding') && ((int) ini_get('mbstring.func_overload')) & 2) {
+                $mbEncoding = mb_internal_encoding();
+                mb_internal_encoding('ASCII');
             }
-        }
+            if(function_exists('mb_detect_encoding')){
+                if(mb_detect_encoding($tplCode,'utf-8,ascii,iso-8859-1') === false){
+                    throw new TageException('must use ascii compatible encoding');
+                }
+            }
 
-        //canonicalCode
-        $this->code = str_replace(array("\r\n","\r"), "\n",$tplCode);
-        //UTF8 can safe compatible ascii
+            //canonicalCode
+            $this->code = str_replace(array("\r\n","\r"), "\n",$tplCode);
+            //UTF8 can safe compatible ascii
 //        $this->chars=preg_split('/(?<!^)(?!$)/u', $tplCode );//split multibyte string
-        $this->length = strlen($this->code);
+            $this->length = strlen($this->code);
 
-        $this->cursor=0;
-        $this->line=1;$this->col=1;
-        $this->options=array_merge($options,self::$DEFAULT_OPTIONS);
+            $this->cursor=0;
+            $this->line=1;$this->col=1;
+            $this->options=array_merge($options,self::$DEFAULT_OPTIONS);
 
-        $this->tokens=[];
+            $this->tokens=[];
 
-        while($this->cursor < $this->length){
-            $this->nextToken();
+            while($this->cursor < $this->length){
+                $this->nextToken();
+            }
+
+            $this->tokens[] = new Token(Token::TYPE_EOF, '', -1, -1);
+
+            if (isset($mbEncoding)) {
+                mb_internal_encoding($mbEncoding);
+            }
+
+            return new TokenStream($this->tokens,$filename);
+        }catch (\Exception $e){
+            //safe rollback setting
+            if (isset($mbEncoding)) {
+                mb_internal_encoding($mbEncoding);
+            }
+            throw $e;
         }
-
-        $this->tokens[] = new Token(Token::TYPE_EOF, '', -1, -1);
-
-        if (isset($mbEncoding)) {
-            mb_internal_encoding($mbEncoding);
-        }
-
-        return new TokenStream($this->tokens,$filename);
     }
 
     /**
@@ -250,8 +258,8 @@ class Lexer
     public function lexString()
     {
         $quote = $this->code[$this->cursor];
-        $this->forward();
         $start=$this->cursor;
+        $this->forward();
         $line=$this->line;
         $col=$this->col;
         while($this->cursor<$this->length){
@@ -261,7 +269,7 @@ class Lexer
             if($this->test($quote)){
                 //end string
                 $this->forward();
-                return new Token(Token::TYPE_STRING,$this->sub_str($start,$this->cursor-2),$line,$col);
+                return new Token(Token::TYPE_STRING,$this->sub_str($start,$this->cursor-1),$line,$col);
             }
             $this->forward();
         }
@@ -272,7 +280,11 @@ class Lexer
         $start=$this->cursor;
         $col=$this->col;
         $line=$this->line;
-        $this->skip(strlen('<?php'));
+        if($this->test('<?=')){
+            $this->skip(strlen('<?='));
+        }else{
+            $this->skip(strlen('<?php'));
+        }
         while(true){
             if($this->test('?>') || $this->cursor >= $this->length){
                 $this->skip(strlen('?>'));

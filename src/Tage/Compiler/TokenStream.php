@@ -26,6 +26,11 @@ class TokenStream
         $this->current=-1;
     }
 
+    public function getFileName()
+    {
+        return $this->filename;
+    }
+
 
     /**
      * 是否到达结尾
@@ -36,9 +41,12 @@ class TokenStream
         return $this->test(Token::TYPE_EOF);
     }
 
-    public function test($tokenType,$tokenValue=null)
+    public function test($tokenTypes,$tokenValue=null)
     {
-        if($this->tokens[$this->current+1]->type != $tokenType){
+        if(!is_array($tokenTypes)){
+            $tokenTypes=[$tokenTypes];
+        }
+        if(!in_array($this->tokens[$this->current+1]->type,$tokenTypes)){
             return false;
         }
         if($tokenValue !== null && $this->tokens[$this->current+1]->value != $tokenValue){

@@ -58,6 +58,16 @@ class Token
      * 字面值
      */
     public $value;
+
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function getValue()
+    {
+        return $this->value;
+    }
     
     /**
      * @return string

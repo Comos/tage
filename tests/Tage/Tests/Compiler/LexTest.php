@@ -9,7 +9,6 @@ namespace Tage\Tests\Compiler;
 use Tage\Compiler\Lexer;
 use Tage\Compiler\Token;
 use Tage\Tests\TageTestCase;
-use Tage\Tests\TokenBuilder;
 
 class LexTest extends TageTestCase
 {
