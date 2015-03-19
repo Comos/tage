@@ -19,12 +19,12 @@ class PrintNode extends AbstractNode
     public function compile()
     {
         if(isset($this->tokens['text'])){
-            return sprintf("echo <<<'TEXT'
+            return sprintf("\necho <<<'TEXT'
 %s
 TEXT;
 ", $this->tokens['text']->getValue());
         }else{
-            return sprintf("echo %s",$this->tokens['expression']);
+            return sprintf("\necho %s;",$this->childNodes['expression']->compile());
         }
     }
 }

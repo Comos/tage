@@ -42,7 +42,7 @@ class ExpressionParser extends AbstractParser{
     public function parseOperand(TokenStream $tokenStream)
     {
         $token=$tokenStream->next();
-        switch($token){
+        switch($token->getType()){
             case Token::TYPE_VARIABLE:
                 //TODO parse filter or sub
                 return new VarNode($token);
