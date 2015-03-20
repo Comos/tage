@@ -13,5 +13,5 @@ abstract class AbstractTemplate
      * 渲染模板
      *            
      */
-    public abstract function run($vars);
+    public abstract function render($vars);
 }
