@@ -6,7 +6,12 @@
  */
 namespace Tage\Compiler\Parser\Tag;
 
-class IfTagParser
-{
+use Tage\Compiler\Parser\TagParser;
 
+class IfTagParser extends TagParser
+{
+    public function getTagName()
+    {
+        return 'If';
+    }
 }

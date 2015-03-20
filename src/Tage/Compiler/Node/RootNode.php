@@ -24,13 +24,16 @@ use Tage\Runtime\AbstractTemplate;
 PHP;
         $tpl.=sprintf('class _Tage_Compiled_Template_%s extends AbstractTemplate',md5($this->fileName));
         $tpl.=<<<'PHP'
+
 {
   public function render($vars){
+
 PHP;
         foreach($this->childNodes as $node){
             $tpl.=$node->compile();
         }
         $tpl.=<<<'PHP'
+
  }
 }
 ?>
