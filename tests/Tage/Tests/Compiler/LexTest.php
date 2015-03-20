@@ -29,6 +29,53 @@ class LexTest extends TageTestCase
                 ]
             ],
             [
+                '{{$foo}} {{$bar}}',
+                [
+                    [
+                        'TAG_START',
+                        '{{',
+                        1,
+                        1
+                    ],
+                    [
+                        'VARIABLE',
+                        '$foo',
+                        1,
+                        3
+                    ],
+                    [
+                        'TAG_END',
+                        '}}',
+                        1,
+                        7
+                    ],
+                    [
+                        'TEXT',
+                        ' ',
+                        1,
+                        9
+                    ],
+                    [
+                        'TAG_START',
+                        '{{',
+                        1,
+                        10
+                    ],
+                    [
+                        'VARIABLE',
+                        '$bar',
+                        1,
+                        12
+                    ],
+                    [
+                        'TAG_END',
+                        '}}',
+                        1,
+                        16
+                    ]
+                ]
+            ],
+            [
                 ' {{$foo}}',
                 [
                     [
