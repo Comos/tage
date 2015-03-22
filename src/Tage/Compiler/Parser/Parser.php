@@ -32,6 +32,7 @@ class Parser extends AbstractParser{
      */
     public function __construct(array $options=[])
     {
+        $customTags = isset($options['customTagParsers']) ? $options['customTagParsers'] : [];
         if(self::$coreTags === null){
             self::$coreTags=[];
             //scan tag directory
@@ -45,7 +46,7 @@ class Parser extends AbstractParser{
                 self::$coreTags[$tagParser->getTagName()]=$tagParser;
             }
         }
-        $this->registerTags = array_merge($options['customTagParsers'], self::$coreTags);
+        $this->registerTags = array_merge($customTags, self::$coreTags);
     }
 
 

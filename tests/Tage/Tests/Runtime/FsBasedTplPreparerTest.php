@@ -2,6 +2,7 @@
 namespace Tage\Tests\Runtime;
 
 use \Tage\Runtime\FsBasedTplPreparer;
+use Tage\Tests\TestUtil;
 
 class FsBasedTplPreparerTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,32 +27,7 @@ class FsBasedTplPreparerTest extends \PHPUnit_Framework_TestCase
         /**
          * @var \SplFileInfo[]
          */
-        $di = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->compiledTplDir));
-        $dirs = [];
-        $files = [];
-        foreach($di as $file)
-        {
-            if (\strlen($file->getRealPath()) <= \strlen($this->compiledTplDir))
-            {
-                continue;
-            }
-            
-            if (\strpos($file->getRealPath(), 'README.md'))
-            {
-                continue;
-            }
-            
-            if ($file->isDir())
-            {
-                $dirs[] = $file->getRealPath();
-            } else {
-                $files[] = $file->getRealPath();
-            }
-        }
-        foreach (array_merge($files, $dirs) as $f)
-        {
-            \unlink($f);
-        }
+        TestUtil::clearDirectory($this->compiledTplDir);
         parent::tearDown();
     }
 
@@ -103,12 +79,13 @@ class FsBasedTplPreparerTest extends \PHPUnit_Framework_TestCase
     
     public function testPrepare()
     {
-        $sourceFile = $this->tplDir.'/greeting.phtml';
+        $filename = 'greeting.phtml';
+        $sourceFile = $this->tplDir.'/'.$filename;
         $compiled = $this->tplDir.'/greeting.phtml.compiled.php';
         $compiler = $this->mockOfCompiler();
         $compiler->expects($this->exactly(1))
             ->method('compile')
-            ->with(file_get_contents($sourceFile))
+            ->with($this->equalTo($filename), $this->equalTo(file_get_contents($sourceFile)))
             ->willReturn(file_get_contents($compiled));
         
         $options = [
@@ -117,10 +94,10 @@ class FsBasedTplPreparerTest extends \PHPUnit_Framework_TestCase
         ];
         
         $preparer = new FsBasedTplPreparer($options, $compiler);
-        $view = $preparer->prepare('greeting.phtml');
+        $view = $preparer->prepare($filename);
         $this->assertInstanceOf('Tage\Runtime\AbstractTemplate', $view);
         
-        $view1 = $preparer->prepare('greeting.phtml');
+        $view1 = $preparer->prepare($filename);
         $this->assertInstanceOf('Tage\Runtime\AbstractTemplate', $view1);
     }
 

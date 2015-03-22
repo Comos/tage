@@ -5,22 +5,39 @@ class Runtime
 {
 
     private $tplPreparer;
-
+    /**
+     * 
+     * @param TplPreparer $tplPreparer
+     */
     public function __construct(TplPreparer $tplPreparer)
     {
         $this->tplPreparer = $tplPreparer;
     }
-
-    public function displayWithoutOB($template, $data = [])
+    /**
+     * Output rendering result directly without OB.
+     * Errors and exceptions may cause imcomplete output. 
+     * 
+     * @param string $tplName
+     * @param array $data
+     * @throws \Exception
+     */
+    public function displayWithoutOB($tplName, $data = [])
     {
-        $this->tplPreparer->prepare($template)->run($data);
+        $this->tplPreparer->prepare($tplName)->render($data);
     }
-
-    public function fetch($template, $data = [])
+    /**
+     * Returns rendering result without any output.
+     * 
+     * @param string $tplName
+     * @param array $data
+     * @throws \Exception
+     * @return string
+     */
+    public function fetch($tplName, $data = [])
     {
         ob_start();
         try {
-            $this->displayWithoutOB($template, $data);
+            $this->displayWithoutOB($tplName, $data);
         } catch (\Exception $ex) {
             ob_end_clean();
             throw $ex;
@@ -29,9 +46,17 @@ class Runtime
         ob_end_clean();
         return $data;
     }
-
-    public function display($template, $data = [])
+    /**
+     * Output rendering result.
+     * 
+     * OB is enabled to prevent imcomplete output cased by Exceptions. 
+     * 
+     * @param  $template
+     * @param array $data
+     * @throws \Exception
+     */
+    public function display($tplName, $data = [])
     {
-        echo $this->fetch($template, $data);
+        echo $this->fetch($tplName, $data);
     }
 }

@@ -12,8 +12,7 @@ class MilestoneTest extends TageTestCase
     {
         $testFiles=glob(__DIR__.'/Fixtures/Milestones/*.test');
         foreach($testFiles as $testFile){
-            //TODO implement
-//            $this->runFixtureTest($testFile);
+            $this->runFixtureTest($testFile);
         }
     }
 }

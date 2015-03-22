@@ -46,34 +46,34 @@ class FsBasedTplPreparer implements TplPreparer
     public function prepare($name)
     {
         $clazz = self::nameToClass($name);
-        if (! \class_exists($clazz)) {
-            
-            $sourceFile = $this->getSourceFile($name);
-            $targetFile = $this->getTargetFile($name);
-            $tpl = new FsBasedTpl($sourceFile, $targetFile);
-            if ($tpl->checkTarget()) {
-                return $targetFile;
-            }
-            $source = $tpl->loadSource();
-            $tpl->writeTarget($this->compiler->compile($source));
-            include $targetFile;
+        if (\class_exists($clazz)) {
+            return new $clazz();
         }
+        
+        $sourceFile = $this->getSourceFile($name);
+        $targetFile = $this->getTargetFile($name);
+        $tpl = new FsBasedTpl($sourceFile, $targetFile);
+        if (!$tpl->checkTarget()) {
+            $source = $tpl->loadSource();
+            $tpl->writeTarget($this->compiler->compile($name, $source));
+        }
+        include $targetFile;
         return new $clazz();
     }
-    
+
     protected function getSourceFile($name)
     {
-        return $this->tplDir.'/'.$name;
+        return $this->tplDir . '/' . $name;
     }
-    
+
     protected function getTargetFile($name)
     {
-        return $this->compiledTplDir.'/'.$name.'.php';
+        return $this->compiledTplDir . '/' . $name . '.php';
     }
 
     private static function nameToClass($name)
     {
-        return '_Tage_Compiled_Tpl_' . \md5($name);
+        return '_Tage_Compiled_Template_' .\md5($name);
     }
 }
 
