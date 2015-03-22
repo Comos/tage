@@ -13,11 +13,12 @@ class AbstractParser
 {
 
     /**
-     * @param $tokenStream TokenStream
+     *
+     * @param $tokenStream TokenStream            
      * @return AbstractNode
      */
-    public function parse($tokenStream)
+    public function parse(TokenStream $tokenStream)
     {
-
+        
     }
 }
