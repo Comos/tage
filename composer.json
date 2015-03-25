@@ -1,6 +1,6 @@
 {
     "name": "comos/tage",
-    "description": "PHP compiling templating engine",
+    "description": "The PHP compiling template engine",
     "keywords": ["templating", "template"],
     "homepage": "http://github.com/Comos/tage",
     "type": "library",
