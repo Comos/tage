@@ -39,14 +39,14 @@ class Lexer
     public function __construct()
     {
         self::$NAME_HEAD_CHARS=array_merge(
-            range('a','z'),range('A','Z')
+            range('a','z'),range('A','Z'),array('_')
         );
         self::$NAME_CHARS = array_merge(
-            self::$NAME_HEAD_CHARS,range('0','9'),['_']
+            self::$NAME_HEAD_CHARS,range('0','9')
         );
         //$var.name func() func(p1,p2)
         self::$PUNCTUATIONS = str_split('(){}.,|');
-        self::$OPERATORS=array_merge(str_split('+-*/%='),['==','>','<','>=','<=','&&','||']);
+        self::$OPERATORS=array_merge(str_split('+-*/%='),['==','!=','>','<','>=','<=','&&','||']);
         self::$NUMBER_CHARS = str_split('0123456789');
     }
 
@@ -172,7 +172,7 @@ class Lexer
                 $this->tokens[]=$this->lexOperator();
             }
             else{
-                throw new CompileException($this->filename,'Invalid token',$this->line,$this->col);
+                throw new CompileException($this->filename,'Invalid token ('.$this->sub_str($this->cursor, $this->cursor+10).')',$this->line,$this->col);
             }
         }
     }
@@ -182,8 +182,8 @@ class Lexer
         $start=$this->cursor;
         $line=$this->line;
         $col=$this->col;
-        if($this->test(self::$OPERATORS)){
-            $this->forward();
+        if($len=$this->test(self::$OPERATORS)){
+            $this->skip($len);
         }
         return new Token(Token::TYPE_OPERATOR,$this->sub_str($start,$this->cursor-1),$line,$col);
     }
@@ -305,22 +305,23 @@ class Lexer
         if(is_array($symbol)){
             foreach($symbol as $s){
                 if($this->test($s)){
-                    return true;
+                    return strlen($s);
                 }
             }
         }else{
             foreach(range(0,strlen($symbol)-1) as $i){
-                if($this->code[$this->cursor+$i] != $symbol[$i]){
-                    return false;
+                if(@$this->code[$this->cursor+$i] != $symbol[$i]){
+                    return 0;
                 }
             }
-            return true;
+            return strlen($symbol);
         }
-        return false;
+        return 0;
     }
 
     protected function forward()
     {
+        if($this->cursor>=$this->length) return;
         if($this->code[$this->cursor] == "\n"){
             $this->line += 1;
             $this->col = 1;
