@@ -21,6 +21,18 @@ use Tage\TageException;
  */
 class ExpressionParser extends AbstractParser{
 
+    const ORDER_L2R=1;
+    const ORDER_R2L=2;
+
+    public static $coreOperators = [];
+    public static $coreBinaryOperators=[
+        array('op'=>'+','nodeClass'=>'Tage\Compiler\Node\Expression\BinaryNod\AddNode','precedence'=>30,'order'=>self::ORDER_L2R),
+        array('op'=>'-','nodeClass'=>'Tage\Compiler\Node\Expression\BinaryNod\SubNode','precedence'=>30,'order'=>self::ORDER_L2R),
+        array('op'=>'*','nodeClass'=>'Tage\Compiler\Node\Expression\BinaryNod\MulNode','precedence'=>60,'order'=>self::ORDER_L2R),
+        array('op'=>'/','nodeClass'=>'Tage\Compiler\Node\Expression\BinaryNod\DivNode','precedence'=>60,'order'=>self::ORDER_L2R),
+    ];
+
+
     public function __construct($options=array())
     {
 

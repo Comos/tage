@@ -37,6 +37,7 @@ $code = isset($_REQUEST['code'])?$_REQUEST['code']:'{{"Hello world"}}';
 
     .token.TYPE_NAME{
         color:darkred;
+        padding:0 5px;
     }
     .token.TYPE_TEXT{
         color:#000000;
