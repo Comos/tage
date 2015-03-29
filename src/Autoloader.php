@@ -21,12 +21,14 @@ class Autoloader
         if (0 !== \strpos($class, 'Tage')) {
             return;
         }
-        
-        if (\file_exists($file = \dirname(__DIR__) . DIRECTORY_SEPARATOR . str_replace('\\', '/', $class) . '.php')) {
+        $class=substr($class,5);//skip Tage/
+
+        if (\file_exists($file = __DIR__ . DIRECTORY_SEPARATOR . str_replace('\\', '/', $class) . '.php')) {
             require $file;
             return;
         }
-        if (\file_exists($file = \dirname(\dirname(__DIR__)) . '/tests/' .\str_replace('\\', '/', $class) . '.php')) {
+        $class=substr($class,6);//skip Tests/
+        if (\file_exists($file = \dirname(__DIR__) . '/tests/' .\str_replace('\\', '/', $class) . '.php')) {
             require $file;
         }
     }

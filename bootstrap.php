@@ -7,5 +7,5 @@
  * It's recommended to use a global bootstrap to register autoloader in production environment,. 
  */
 
-require_once __DIR__.'/src/Tage/Autoloader.php';
+require_once __DIR__.'/src/Autoloader.php';
 \Tage\Autoloader::register();
