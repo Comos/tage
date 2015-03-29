@@ -27,7 +27,6 @@ class Lexer
     private static $DEFAULT_OPTIONS=array(
         'short_open_tag'=>false,//XXX should we support different php tag styles? http://php.net/manual/zh/language.basic-syntax.phpmode.php
         'check_php_syntax'=>true,
-        'asp_tags'=>false,
     );
 
     private static $NAME_HEAD_CHARS=[];
@@ -141,10 +140,8 @@ class Lexer
             if($this->cursor>=$this->length){
                 throw new CompileException($this->filename,'Tag not closed',$this->line,$this->col);
             }
-            //skip space
-            while($this->test([' ',"\n","\t"])){
-                $this->forward();
-            }
+
+            $this->skipBlankOrNewLine();
 
             if($this->test('}}'))
             {
@@ -285,12 +282,48 @@ class Lexer
         }else{
             $this->skip(strlen('<?php'));
         }
-        while(true){
-            if($this->test('?>') || $this->cursor >= $this->length){
+        while($this->cursor<$this->length){
+            if($this->test('<<<')){
+                $this->_forwardPHPDocString();
+            }
+            if($this->test(['"',"'"])){
+                $this->lexString();//lex and forward string
+            }
+            if($this->test('?>')){
                 $this->skip(strlen('?>'));
                 return new Token(Token::TYPE_PHP_CODE, $this->sub_str($start, $this->cursor-1),$line,$col);
             }
             $this->forward();
+        }
+        return new Token(Token::TYPE_PHP_CODE,$this->sub_str($start,$this->length-1),$line,$col);
+    }
+
+    private function _forwardPHPDocString()
+    {
+        $this->skip(strlen('<<<'));//
+        //here doc/now doc with quote
+        if($this->test(['"',"'"])){
+            $stringToken=$this->lexString();
+            $stringWithoutQuote=join('',array_slice(str_split($stringToken->getValue()),1,strlen($stringToken->getValue())-2));
+            $endSymbol="\n".$stringWithoutQuote;
+        }else{
+            //here doc with symbol
+            $nameToken=$this->lexName();
+            $endSymbol="\n".$nameToken->getValue();
+        }
+        while($this->cursor<$this->length){
+            if($this->test($endSymbol)){
+                $this->skip(strlen($endSymbol));
+                $this->skipBlankOrNewLine();
+                if($this->test(';')){
+                    $this->forward();
+                    return;//match end
+                }else{
+                    $this->forward();
+                }
+            }else{
+                $this->forward();
+            }
         }
     }
 
@@ -338,4 +371,11 @@ class Lexer
         }
     }
 
+    protected function skipBlankOrNewLine()
+    {
+        //skip space
+        while($this->test([' ',"\n","\t"])){
+            $this->forward();
+        }
+    }
 }

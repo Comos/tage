@@ -241,6 +241,41 @@ class LexTest extends TageTestCase
                         1
                     ]
                 ]
+            ],
+            [
+                '<?php
+echo "?>";
+echo \'?>\';
+echo <<<\'PHP\'
+?>
+PHP;
+echo <<<"PHP"
+?>
+PHP;
+echo <<<TEXT
+?>
+TEXT;
+?>',
+                [
+                    [
+                        'PHP_CODE',
+                        '<?php
+echo "?>";
+echo \'?>\';
+echo <<<\'PHP\'
+?>
+PHP;
+echo <<<"PHP"
+?>
+PHP;
+echo <<<TEXT
+?>
+TEXT;
+?>',
+                        1,
+                        1,
+                    ]
+                ]
             ]
         ];
         // [' {{ ($a+1)*2 }} ',TokenBuilder::begin()->append(new Token(Token::TYPE_TAG_START,'{{',1))
