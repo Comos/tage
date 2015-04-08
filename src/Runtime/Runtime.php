@@ -2,42 +2,47 @@
 namespace Tage\Runtime;
 
 class Runtime
-{
-
-    private $tplPreparer;
+{    
+    /**
+     * 
+     * @var Context
+     */
+    private $context;
     /**
      * 
      * @param TplPreparer $tplPreparer
      */
     public function __construct(TplPreparer $tplPreparer)
     {
-        $this->tplPreparer = $tplPreparer;
+        $this->context = new Context($tplPreparer);
     }
+    
     /**
      * Output rendering result directly without OB.
      * Errors and exceptions may cause imcomplete output. 
      * 
-     * @param string $tplName
+     * @param string $tplId
      * @param array $data
      * @throws \Exception
      */
-    public function displayWithoutOB($tplName, $data = [])
+    public function displayWithoutOB($tplId, $data = [])
     {
-        $this->tplPreparer->prepare($tplName)->render($data);
+        $this->context->t($tplId, $data);
     }
     /**
      * Returns rendering result without any output.
      * 
-     * @param string $tplName
+     * @param string $tplId
      * @param array $data
      * @throws \Exception
      * @return string
+     * @todo deal with OBLevel
      */
-    public function fetch($tplName, $data = [])
+    public function fetch($tplId, $data = [])
     {
         ob_start();
         try {
-            $this->displayWithoutOB($tplName, $data);
+            $this->displayWithoutOB($tplId, $data);
         } catch (\Exception $ex) {
             ob_end_clean();
             throw $ex;
@@ -55,8 +60,8 @@ class Runtime
      * @param array $data
      * @throws \Exception
      */
-    public function display($tplName, $data = [])
+    public function display($tplId, $data = [])
     {
-        echo $this->fetch($tplName, $data);
+        echo $this->fetch($tplId, $data);
     }
 }
