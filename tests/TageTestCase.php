@@ -12,7 +12,7 @@ use Tage\Tage;
 class TageTestCase extends \PHPUnit_Framework_TestCase
 {
 
-    public function runFixtureTest($path)
+    public function runFixtureTest($path, $skipList = array())
     {
         $directives = [
             'TEST',
@@ -38,7 +38,7 @@ class TageTestCase extends \PHPUnit_Framework_TestCase
                 $parseConfig[$lastDirective] .= $line . "\n";
             }
         }
-        $testDescription = $parseConfig['--TEST--'];
+        $testDescription = trim($parseConfig['--TEST--']);
         $template = $parseConfig['--TEMPLATE--'];
         $vars = [];
         if (isset($parseConfig['--DATA--'])) {
@@ -54,8 +54,8 @@ class TageTestCase extends \PHPUnit_Framework_TestCase
             ]);
             
            \ob_start();
-            $tage->display($tplName, $vars);
-            $actual =\ob_get_contents();
+           $tage->display($tplName, $vars);
+           $actual =\ob_get_contents();
            \ob_end_clean();
             
             if (isset($parseConfig['--EXPECT--'])) {

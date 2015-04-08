@@ -1,0 +1,16 @@
+--TEST--
+milestone2
+--TEMPLATE--
+<html>{{set a=1 b="2" c=3.0}}
+<body>{{set bar="Hello"}}
+<h1>{{$bar}},{{$a}},{{$b}},{{$c}}</h1>
+</body>
+</html>
+--DATA--
+return array();
+--EXPECT--
+<html>
+<body>
+<h1>hello,1,2,3</h1>
+</body>
+</html>

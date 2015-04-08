@@ -1,0 +1,18 @@
+--TEST--
+milestone2
+--TEMPLATE--
+{{if true}}a0{{endif}}
+{{if false}}b1{{endif}}
+{{set a=-1}}{{if $a>0}}z{{else}}c2{{endif}}
+{{if $a>0}}z{{else}}d3{{/if}}
+{{if $a>0}}z{{elseif $a>-1}}d{{else}}e4{{endif}}
+{{if $a<0}}-{{if $a<-1}}e{{else}}f5{{endif}}-{{endif}}
+--DATA--
+return array('bar'=>'Hello World');
+--EXPECT--
+a0
+b1
+c2
+d3
+e4
+f5
