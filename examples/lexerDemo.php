@@ -7,8 +7,8 @@
  *
  * User: 13leaf
  */
-require_once join(DIRECTORY_SEPARATOR,[__DIR__,'..','src','Tage','Autoloader.php']);
-\Tage\Autoloader::register();
+require_once join(DIRECTORY_SEPARATOR,[__DIR__,'..','src','Autoloader.php']);
+Tage\Autoloader::register();
 $code = isset($_REQUEST['code'])?$_REQUEST['code']:'{{"Hello world"}}';
 ?>
 
