@@ -3,9 +3,9 @@
  * User: bigbigant
  * Date: Mar 11 2015
  */
-namespace Tage\Tests\Util;
+namespace Comos\Tage\Util;
 
-use Tage\Util\Config;
+use Comos\Tage\Util\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
@@ -50,7 +50,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     
     /**
      * @dataProvider getParamMethodsProvider_RestrictMode_MissRequiredField_DataProvider
-     * @expectedException Tage\Util\ConfigException
+     * @expectedException Comos\Tage\Util\ConfigException
      */
     public function testGetParamMethods_RestrictMode_MissRequiredField($method, $data, $key) {
     	Config::fromArray($data)->$method($key);

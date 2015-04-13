@@ -8,4 +8,4 @@
  */
 
 require_once __DIR__.'/src/Autoloader.php';
-\Tage\Autoloader::register();
+Comos\Tage\Autoloader::register();

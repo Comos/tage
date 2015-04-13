@@ -4,7 +4,7 @@
  * Date: Mar 11 2015
  */
 
-namespace  Tage\Util;
+namespace  Comos\Tage\Util;
 
 class ConfigException extends \Exception
 {

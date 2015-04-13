@@ -1,5 +1,5 @@
 <?php
-namespace Tage;
+namespace Comos\Tage;
 
 /**
  * Class Autoloader
@@ -18,16 +18,15 @@ class Autoloader
 
     static public function autoload($class)
     {
-        if (0 !== \strpos($class, 'Tage')) {
+        if (0 !== \strpos($class, 'Comos\\Tage')) {
             return;
         }
-        $class=substr($class,5);//skip Tage/
+        $class=substr($class,11);//skip Tage/
 
         if (\file_exists($file = __DIR__ . DIRECTORY_SEPARATOR . str_replace('\\', '/', $class) . '.php')) {
             require $file;
             return;
         }
-        $class=substr($class,6);//skip Tests/
         if (\file_exists($file = \dirname(__DIR__) . '/tests/' .\str_replace('\\', '/', $class) . '.php')) {
             require $file;
         }

@@ -4,25 +4,25 @@
  * Date: 15-3-7
  * Time: 上午6:09
  */
-namespace Tage;
+namespace Comos\Tage;
 
-use Tage\Util\Config;
-use Tage\Runtime\FsBasedTplPreparer;
-use Tage\Compiler\Compiler;
-use Tage\Runtime\Runtime;
+use Comos\Tage\Util\Config;
+use Comos\Tage\Runtime\FsBasedTplPreparer;
+use Comos\Tage\Compiler\Compiler;
+use Comos\Tage\Runtime\Runtime;
 
 class Tage
 {
 
     /**
      *
-     * @var \Tage\Runtime\TplPreparer
+     * @var \Comos\Tage\Runtime\TplPreparer
      */
     private $tplPreparer;
 
     /**
      *
-     * @var \Tage\Runtime\Runtime
+     * @var \Comos\Tage\Runtime\Runtime
      */
     private $runtime;
 

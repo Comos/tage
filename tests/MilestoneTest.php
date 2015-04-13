@@ -4,7 +4,7 @@
  * Date: 15-3-7
  * Time: 上午6:31
  */
-namespace Tage\Tests;
+namespace Comos\Tage;
 
 class MilestoneTest extends TageTestCase
 {

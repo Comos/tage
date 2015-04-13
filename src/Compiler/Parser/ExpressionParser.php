@@ -4,15 +4,15 @@
  * Date: 15-3-7
  * Time: 上午4:16
  */
-namespace Tage\Compiler\Parser;
+namespace Comos\Tage\Compiler\Parser;
 
-use Tage\Compiler\CompileException;
-use Tage\Compiler\Compiler\Node\Expression\Operand\ConstantNode;
-use Tage\Compiler\Node\Expression\Operand\VarNode;
-use Tage\Compiler\Token;
-use Tage\Compiler\TokenStream;
-use Tage\Compiler\Node\Expression\ExpressionNode;
-use Tage\TageException;
+use Comos\Tage\Compiler\CompileException;
+use Comos\Tage\Compiler\Compiler\Node\Expression\Operand\ConstantNode;
+use Comos\Tage\Compiler\Node\Expression\Operand\VarNode;
+use Comos\Tage\Compiler\Token;
+use Comos\Tage\Compiler\TokenStream;
+use Comos\Tage\Compiler\Node\Expression\ExpressionNode;
+use Comos\Tage\TageException;
 
 /**
  * Class ExpressionParser
@@ -26,10 +26,10 @@ class ExpressionParser extends AbstractParser{
 
     public static $coreOperators = [];
     public static $coreBinaryOperators=[
-        array('op'=>'+','nodeClass'=>'Tage\Compiler\Node\Expression\BinaryNod\AddNode','precedence'=>30,'order'=>self::ORDER_L2R),
-        array('op'=>'-','nodeClass'=>'Tage\Compiler\Node\Expression\BinaryNod\SubNode','precedence'=>30,'order'=>self::ORDER_L2R),
-        array('op'=>'*','nodeClass'=>'Tage\Compiler\Node\Expression\BinaryNod\MulNode','precedence'=>60,'order'=>self::ORDER_L2R),
-        array('op'=>'/','nodeClass'=>'Tage\Compiler\Node\Expression\BinaryNod\DivNode','precedence'=>60,'order'=>self::ORDER_L2R),
+        array('op'=>'+','nodeClass'=>'Comos\Tage\Compiler\Node\Expression\BinaryNod\AddNode','precedence'=>30,'order'=>self::ORDER_L2R),
+        array('op'=>'-','nodeClass'=>'Comos\Tage\Compiler\Node\Expression\BinaryNod\SubNode','precedence'=>30,'order'=>self::ORDER_L2R),
+        array('op'=>'*','nodeClass'=>'Comos\Tage\Compiler\Node\Expression\BinaryNod\MulNode','precedence'=>60,'order'=>self::ORDER_L2R),
+        array('op'=>'/','nodeClass'=>'Comos\Tage\Compiler\Node\Expression\BinaryNod\DivNode','precedence'=>60,'order'=>self::ORDER_L2R),
     ];
 
 

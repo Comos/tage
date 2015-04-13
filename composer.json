@@ -20,7 +20,7 @@
         "phpunit/phpunit": "~4.0"
     },
     "autoload": {
-        "psr-4": {"Tage\\": ["src/Tage", "tests/Tage"]}
+        "psr-4": {"Comos\\Tage\\": ["src", "tests"]}
     },
     "scripts": {
         "test": "phpunit"

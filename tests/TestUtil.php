@@ -2,7 +2,7 @@
 /**
  * @author bigbigant
  */
-namespace Tage\Tests;
+namespace Comos\Tage;
 
 class TestUtil
 {

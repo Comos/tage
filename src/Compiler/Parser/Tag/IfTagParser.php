@@ -4,9 +4,9 @@
  * Date: 15-3-7
  * Time: 上午8:42
  */
-namespace Tage\Compiler\Parser\Tag;
+namespace Comos\Tage\Compiler\Parser\Tag;
 
-use Tage\Compiler\Parser\TagParser;
+use Comos\Tage\Compiler\Parser\TagParser;
 
 class IfTagParser extends TagParser
 {

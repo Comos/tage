@@ -4,18 +4,18 @@
  * Date: 15-3-7
  * Time: 上午5:20
  */
-namespace Tage\Compiler\Parser;
+namespace Comos\Tage\Compiler\Parser;
 
-use Tage\Compiler\Node\PHPCodeNode;
-use Tage\Compiler\Node\PrintNode;
-use Tage\Compiler\Node\RootNode;
-use Tage\Compiler\Token;
-use Tage\Compiler\TokenStream;
-use Tage\Compiler\Node\AbstractNode;
-use Tage\TageException;
+use Comos\Tage\Compiler\Node\PHPCodeNode;
+use Comos\Tage\Compiler\Node\PrintNode;
+use Comos\Tage\Compiler\Node\RootNode;
+use Comos\Tage\Compiler\Token;
+use Comos\Tage\Compiler\TokenStream;
+use Comos\Tage\Compiler\Node\AbstractNode;
+use Comos\Tage\TageException;
 
 /**
- * @package Tage\Parser
+ * @package Comos\Tage\Parser
  * 解析标签语句
  */
 class Parser extends AbstractParser{
@@ -38,7 +38,7 @@ class Parser extends AbstractParser{
             //scan tag directory
             foreach(glob(__DIR__.'/Tag/*TagParser.php') as $coreTag)
             {
-                $tagClass='Tage\Compiler\Parser\Tag'.'\\'.basename($coreTag,".php");
+                $tagClass='Comos\Tage\Compiler\Parser\Tag'.'\\'.basename($coreTag,".php");
                 /**
                  * @var TagParser $tagParser
                  */

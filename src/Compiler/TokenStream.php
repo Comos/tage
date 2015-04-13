@@ -4,9 +4,7 @@
  * Date: 15-3-7
  * Time: 上午4:40
  */
-namespace Tage\Compiler;
-
-use Tage\TageException;
+namespace Comos\Tage\Compiler;
 
 class TokenStream
 {
@@ -58,12 +56,13 @@ class TokenStream
     /**
      * 移动并返回下一个token
      * @return Token
+     * @throws ParseException
      */
     public function next()
     {
         $this->current++;
         if($this->current >= count($this->tokens)){
-            throw new TageException('End template');
+            throw new ParseException('End template');
         }
         return $this->tokens[$this->current];
     }
@@ -73,6 +72,7 @@ class TokenStream
      * @param $tokenType
      * @param null $tokenValue
      * @return Token
+     * @throws ParseException
      */
     public function expect($tokenType,$tokenValue=null)
     {
@@ -80,7 +80,7 @@ class TokenStream
         if($this->test($tokenType,$tokenValue)){
            return $this->next();
         }else{
-            throw new CompileException($this->filename,sprintf('expect %s',$tokenValue==null?Token::typeToString($tokenType):($tokenValue.'['.Token::typeToString($tokenType).']')),$token->line,$token->col);
+            throw new ParseException($this->filename,sprintf('expect %s',$tokenValue==null?Token::typeToString($tokenType):($tokenValue.'['.Token::typeToString($tokenType).']')),$token->line,$token->col);
         }
     }
 

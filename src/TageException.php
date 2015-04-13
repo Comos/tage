@@ -4,7 +4,7 @@
  * Date: 15-3-10
  * Time: 下午9:24
  */
-namespace Tage;
+namespace Comos\Tage;
 
 class TageException extends \Exception
 {

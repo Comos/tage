@@ -3,7 +3,7 @@
  * User: bigbigant
  * Date: Mar 11 2015
  */
-namespace Tage\Runtime;
+namespace Comos\Tage\Runtime;
 
 class FsBasedTpl
 {

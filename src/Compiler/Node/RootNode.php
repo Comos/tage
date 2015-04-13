@@ -2,10 +2,10 @@
 /**
  * User: 13leaf
  */
-namespace Tage\Compiler\Node;
+namespace Comos\Tage\Compiler\Node;
 
 /**
- * @package Tage\Compiler\Node
+ * @package Comos\Tage\Compiler\Node
  */
 class RootNode extends AbstractNode
 {

@@ -1,5 +1,5 @@
 <?php
-namespace Tage\Runtime;
+namespace Comos\Tage\Runtime;
 
 class Context
 {

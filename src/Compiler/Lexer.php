@@ -5,8 +5,7 @@
  * Time: 上午4:35
  */
 
-namespace Tage\Compiler;
-use Tage\TageException;
+namespace Comos\Tage\Compiler;
 
 /**
  * Class Lexer
@@ -67,7 +66,7 @@ class Lexer
             }
             if(function_exists('mb_detect_encoding')){
                 if(mb_detect_encoding($tplCode,'utf-8,ascii,iso-8859-1') === false){
-                    throw new TageException('must use ascii compatible encoding');
+                    throw new LexerException('must use ascii compatible encoding');
                 }
             }
 
@@ -138,7 +137,7 @@ class Lexer
         $this->skip(strlen('{{'));
         while(true){
             if($this->cursor>=$this->length){
-                throw new CompileException($this->filename,'Tag not closed',$this->line,$this->col);
+                throw new LexerException($this->filename,'Tag not closed',$this->line,$this->col);
             }
 
             $this->skipBlankOrNewLine();
@@ -169,7 +168,7 @@ class Lexer
                 $this->tokens[]=$this->lexOperator();
             }
             else{
-                throw new CompileException($this->filename,'Invalid token ('.$this->sub_str($this->cursor, $this->cursor+10).')',$this->line,$this->col);
+                throw new LexerException($this->filename,'Invalid token ('.$this->sub_str($this->cursor, $this->cursor+10).')',$this->line,$this->col);
             }
         }
     }

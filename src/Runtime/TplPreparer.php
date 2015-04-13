@@ -3,7 +3,7 @@
  * User: bigbigant
  * Time: Mar 08 2015
  */
-namespace Tage\Runtime;
+namespace Comos\Tage\Runtime;
 
 interface TplPreparer
 {
@@ -11,8 +11,8 @@ interface TplPreparer
     /**
      *
      * @param string $name
-     * @throws \Tage\Runtime\FailToLoadTplException
-     * @return \Tage\Runtime\AbstractTemplate
+     * @throws \Comos\Tage\Runtime\FailToLoadTplException
+     * @return \Comos\Tage\Runtime\AbstractTemplate
      */
     public function prepare($name);
 }

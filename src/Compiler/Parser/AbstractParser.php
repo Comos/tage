@@ -4,10 +4,10 @@
  * Date: 15-3-7
  * Time: 上午5:21
  */
-namespace Tage\Compiler\Parser;
+namespace Comos\Tage\Compiler\Parser;
 
-use Tage\Compiler\TokenStream;
-use Tage\Compiler\Node\AbstractNode;
+use Comos\Tage\Compiler\TokenStream;
+use Comos\Tage\Compiler\Node\AbstractNode;
 
 class AbstractParser
 {

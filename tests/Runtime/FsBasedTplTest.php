@@ -1,7 +1,7 @@
 <?php
-namespace Tage\Tests\Runtime;
+namespace Comos\Tage\Runtime;
 
-use Tage\Runtime\FsBasedTpl;
+use Comos\Tage\Runtime\FsBasedTpl;
 
 class FsBasedTplTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,7 +37,7 @@ class FsBasedTplTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($result);
     }
     /**
-     * @expectedException Tage\Runtime\Exception
+     * @expectedException Comos\Tage\Runtime\Exception
      * @expectedExceptionMessage fail to get mtime from file
      */
     public function testCheckTarget_SourceDoesNotExist()

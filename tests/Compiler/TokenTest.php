@@ -3,9 +3,9 @@
  * User: bigbigant
  * Date: Mar 11 2015
  */
-namespace Tage\Tests\Compiler;
+namespace Comos\Tage\Compiler;
 
-use Tage\Compiler\Token;
+use Comos\Tage\Compiler\Token;
 
 class TokenTest extends \PHPUnit_Framework_Testcase
 {

@@ -3,7 +3,7 @@
  * @author bigbigant
  */
 
-namespace Tage\Tests;
+namespace Comos\Tage;
 
 class TageTest extends \PHPUnit_Framework_TestCase
 {

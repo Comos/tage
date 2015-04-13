@@ -1,5 +1,5 @@
 <?php
-namespace Tage\Compiler\Parser;
+namespace Comos\Tage\Compiler\Parser;
 
 abstract class TagParser extends AbstractParser
 {

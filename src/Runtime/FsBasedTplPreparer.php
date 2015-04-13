@@ -3,7 +3,7 @@
  * User: bigbigant
  * Date: Mar 08 2015
  */
-namespace Tage\Runtime;
+namespace Comos\Tage\Runtime;
 
 class FsBasedTplPreparer implements TplPreparer
 {
@@ -29,11 +29,11 @@ class FsBasedTplPreparer implements TplPreparer
     /**
      *
      * @param array $options            
-     * @param \Tage\Compiler\Compiler $compiler            
+     * @param Comos\Tage\Compiler\Compiler $compiler            
      */
-    public function __construct($options, \Tage\Compiler\Compiler $compiler)
+    public function __construct($options, \Comos\Tage\Compiler\Compiler $compiler)
     {
-        $conf = \Tage\Util\Config::fromArray($options);
+        $conf = \Comos\Tage\Util\Config::fromArray($options);
         $this->tplDir = $conf->rstr('tplDir');
         $this->compiledTplDir = $conf->rstr('compiledTplDir');
         $this->compiler = $compiler;

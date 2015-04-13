@@ -4,10 +4,10 @@
  * Date: 15-3-7
  * Time: 上午5:29
  */
-namespace Tage\Tests;
+namespace Comos\Tage;
 
-use Tage\Compiler\Parser\Parser;
-use Tage\Tage;
+use Comos\Tage\Compiler\Parser\Parser;
+use Comos\Tage\Tage;
 
 class TageTestCase extends \PHPUnit_Framework_TestCase
 {

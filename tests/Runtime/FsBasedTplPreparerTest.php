@@ -1,8 +1,8 @@
 <?php
-namespace Tage\Tests\Runtime;
+namespace Comos\Tage\Runtime;
 
-use \Tage\Runtime\FsBasedTplPreparer;
-use Tage\Tests\TestUtil;
+use Comos\Tage\Runtime\FsBasedTplPreparer;
+use Comos\Tage\TestUtil;
 
 class FsBasedTplPreparerTest extends \PHPUnit_Framework_TestCase
 {
@@ -43,7 +43,7 @@ class FsBasedTplPreparerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider __construct_InvalidOptionsProvider
-     * @expectedException Tage\Util\ConfigException
+     * @expectedException Comos\Tage\Util\ConfigException
      */
     public function test__construct_InvalidOptionFields($options)
     {
@@ -95,19 +95,19 @@ class FsBasedTplPreparerTest extends \PHPUnit_Framework_TestCase
         
         $preparer = new FsBasedTplPreparer($options, $compiler);
         $view = $preparer->prepare($filename);
-        $this->assertInstanceOf('Tage\Runtime\AbstractTemplate', $view);
+        $this->assertInstanceOf('Comos\Tage\Runtime\AbstractTemplate', $view);
         
         $view1 = $preparer->prepare($filename);
-        $this->assertInstanceOf('Tage\Runtime\AbstractTemplate', $view1);
+        $this->assertInstanceOf('Comos\Tage\Runtime\AbstractTemplate', $view1);
     }
 
     /**
      *
-     * @return \Tage\Compiler\Compiler
+     * @return \Comos\Tage\Compiler\Compiler
      */
     protected function mockOfCompiler()
     {
-        return $this->getMockBuilder('\\Tage\\Compiler\\Compiler')
+        return $this->getMockBuilder('\\Comos\\Tage\\Compiler\\Compiler')
             ->setMethods([
             'compile'
         ])

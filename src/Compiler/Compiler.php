@@ -2,9 +2,9 @@
 /**
  * @author bigbigant, 13leaf
  */
-namespace Tage\Compiler;
+namespace Comos\Tage\Compiler;
 
-use Tage\Compiler\Node\AbstractNode;
+use Comos\Tage\Compiler\Node\AbstractNode;
 
 class Compiler {
 	/**

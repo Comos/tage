@@ -4,7 +4,7 @@
  * Date: 15-3-7
  * Time: 上午4:40
  */
-namespace Tage\Compiler;
+namespace Comos\Tage\Compiler;
 
 use Tage\TageException;
 

@@ -2,7 +2,7 @@
 /**
  * User: 13leaf
  */
-namespace Tage\Runtime;
+namespace Comos\Tage\Runtime;
 
 abstract class AbstractTemplate
 {

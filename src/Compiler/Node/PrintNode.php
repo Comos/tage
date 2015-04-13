@@ -2,11 +2,11 @@
 /**
  * User: 13leaf
  */
-namespace Tage\Compiler\Node;
-use Tage\Compiler\Token;
+namespace Comos\Tage\Compiler\Node;
+use Comos\Tage\Compiler\Token;
 
 /**
- * @package Tage\Compiler\Node
+ * @package Comos\Tage\Compiler\Node
  */
 class PrintNode extends AbstractNode
 {

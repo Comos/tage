@@ -4,8 +4,8 @@
  * Date: 15-3-7
  * Time: 上午4:18
  */
-namespace Tage\Compiler\Node;
-use Tage\Compiler\Token;
+namespace Comos\Tage\Compiler\Node;
+use Comos\Tage\Compiler\Token;
 
 /**
  * Class AbstractNode
