@@ -1,7 +1,7 @@
 vendor
 vendor/*
 composer.lock
-
+.idea
 *.pid
 .lock
 .buildpath
