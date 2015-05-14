@@ -4,12 +4,11 @@
  */
 namespace Comos\Tage\Compiler;
 
-use Comos\Tage\Compiler\Node\AbstractNode;
 
 class Compiler {
 	/**
 	 * @param string $tplName
-	 * @param string $sourceCode
+	 * @param string $source
 	 * @return string target codes 
 	 */
     public function compile($tplName, $source) {
