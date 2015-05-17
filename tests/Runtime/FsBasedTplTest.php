@@ -1,5 +1,5 @@
 <?php
-namespace Comos\Tage\Runtime;
+namespace Comos\Tage\Tests\Runtime;
 
 use Comos\Tage\Runtime\FsBasedTpl;
 

@@ -4,7 +4,7 @@
  * Date: 15-3-7
  * Time: 上午5:29
  */
-namespace Comos\Tage;
+namespace Comos\Tage\Tests;
 
 use Comos\Tage\Compiler\Parser\Parser;
 use Comos\Tage\Tage;

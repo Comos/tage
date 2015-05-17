@@ -27,7 +27,10 @@ class Autoloader
             require $file;
             return;
         }
-        if (\file_exists($file = \dirname(__DIR__) . '/tests/' .\str_replace('\\', '/', $class) . '.php')) {
+        if(strpos($class,'Tests\\') === 0){
+            $class[0] = 't';
+        }
+        if (\file_exists($file = \dirname(__DIR__) . '/' .\str_replace('\\', '/', $class) . '.php')) {
             require $file;
         }
     }

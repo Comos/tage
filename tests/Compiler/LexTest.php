@@ -4,11 +4,11 @@
  * Date: 15-3-7
  * Time: 上午5:28
  */
-namespace Comos\Tage\Compiler;
+namespace Comos\Tage\Tests\Compiler;
 
 use Comos\Tage\Compiler\Lexer;
 use Comos\Tage\Compiler\Token;
-use Comos\Tage\TageTestCase;
+use Comos\Tage\Tests\TageTestCase;
 
 class LexTest extends TageTestCase
 {

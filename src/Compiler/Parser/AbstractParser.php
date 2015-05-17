@@ -9,7 +9,7 @@ namespace Comos\Tage\Compiler\Parser;
 use Comos\Tage\Compiler\TokenStream;
 use Comos\Tage\Compiler\Node\AbstractNode;
 
-class AbstractParser
+abstract class AbstractParser
 {
 
     /**
@@ -19,6 +19,6 @@ class AbstractParser
      */
     public function parse(TokenStream $tokenStream)
     {
-        
+
     }
 }

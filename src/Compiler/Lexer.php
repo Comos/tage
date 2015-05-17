@@ -6,6 +6,7 @@
  */
 
 namespace Comos\Tage\Compiler;
+use Comos\Tage\Exception;
 
 /**
  * Class Lexer
@@ -44,7 +45,7 @@ class Lexer
         );
         //$var.name func() func(p1,p2)
         self::$PUNCTUATIONS = str_split('(){}.,|');
-        self::$OPERATORS=array_merge(str_split('+-*/%='),['==','!=','>','<','>=','<=','&&','||']);
+        self::$OPERATORS=array_merge(['==','!=','>=','<=','&&','||','>','<'],str_split('+-*/%^?:='));
         self::$NUMBER_CHARS = str_split('0123456789');
     }
 
@@ -66,7 +67,7 @@ class Lexer
             }
             if(function_exists('mb_detect_encoding')){
                 if(mb_detect_encoding($tplCode,'utf-8,ascii,iso-8859-1') === false){
-                    throw new LexerException('must use ascii compatible encoding');
+                    throw new Exception('must use ascii compatible encoding');
                 }
             }
 

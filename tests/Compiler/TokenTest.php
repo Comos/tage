@@ -3,7 +3,7 @@
  * User: bigbigant
  * Date: Mar 11 2015
  */
-namespace Comos\Tage\Compiler;
+namespace Comos\Tage\Tests\Compiler;
 
 use Comos\Tage\Compiler\Token;
 

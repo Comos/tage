@@ -3,7 +3,7 @@
  * User: bigbigant
  * Date: Mar 11 2015
  */
-namespace Comos\Tage\Util;
+namespace Comos\Tage\Tests\Util;
 
 use Comos\Tage\Util\Config;
 

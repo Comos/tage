@@ -6,9 +6,11 @@
  */
 namespace Comos\Tage\Compiler\Parser;
 
+use Comos\Tage\Compiler\Node\BodyNode;
 use Comos\Tage\Compiler\Node\PHPCodeNode;
 use Comos\Tage\Compiler\Node\PrintNode;
 use Comos\Tage\Compiler\Node\RootNode;
+use Comos\Tage\Compiler\ParseException;
 use Comos\Tage\Compiler\Token;
 use Comos\Tage\Compiler\TokenStream;
 use Comos\Tage\Compiler\Node\AbstractNode;
@@ -25,6 +27,16 @@ class Parser extends AbstractParser{
      */
     protected $registerTags=[];
     private static $coreTags=null;
+
+    /**
+     * @var ExpressionParser parser
+     */
+    private $expressionParser=null;
+
+    /**
+     * @var TokenStream
+     */
+    private $tokenStream;
 
     /**
      * @param $options array
@@ -50,12 +62,6 @@ class Parser extends AbstractParser{
     }
 
 
-    /**
-     * @var ExpressionParser parser
-     */
-    private $expressionParser=null;
-
-
     public function setExpressionParser(ExpressionParser $parser)
     {
         $this->expressionParser=$parser;
@@ -70,13 +76,22 @@ class Parser extends AbstractParser{
     }
 
     /**
-     * @param $tokenStream TokenStream
-     * @return AbstractNode
+     * @return TokenStream
      */
-    public function parse(TokenStream $tokenStream)
+    public function getTokenStream()
+    {
+        return $this->tokenStream;
+    }
+
+    /**
+     * @param $fromTagParser null|TagParser
+     */
+    public function parseBody($fromTagParser)
     {
         $expressionParser=$this->getExpressionParser();
         $nodes=[];
+        $tokenStream=$this->tokenStream;
+
         while(!$tokenStream->isEOF()){
             $token=$tokenStream->next();
             switch($token->getType()){
@@ -87,11 +102,17 @@ class Parser extends AbstractParser{
                     $nodes[] = new PHPCodeNode($token);
                     break;
                 case Token::TYPE_TAG_START:
+                    if($fromTagParser && $fromTagParser->parseTagBreak($tokenStream)){
+                        return new BodyNode([],$nodes);
+                    }
                     //try parse tag
                     $parseTag=false;
                     foreach($this->registerTags as $tagName=>$tagParser){
                         if($tokenStream->test(Token::TYPE_NAME,$tagName)){
-                            $tagParser->parse($tokenStream);
+                            $tokenStream->next();
+                            $tagParser->setRootParser($this);
+                            $tagParser->setTagToken($tokenStream->current());
+                            $nodes[]=$tagParser->parse($tokenStream);
                             $parseTag=true;
                             break;
                         }
@@ -99,11 +120,26 @@ class Parser extends AbstractParser{
                     if(!$parseTag){
                         //parse as expression
                         $nodes[]=new PrintNode($expressionParser->parse($tokenStream));
+                        $tokenStream->expect(Token::TYPE_TAG_END);
                     }
-                    $tokenStream->expect(Token::TYPE_TAG_END);
                     break;
             }
         }
-        return new RootNode($tokenStream->getFileName(),$nodes);
+        //check tagParser closed
+        if($fromTagParser!=null && !$fromTagParser->hasClosed()){
+            throw new ParseException($tokenStream->getFileName(),sprintf('Tag %s is not closed!',$fromTagParser->getTagName()),$fromTagParser->getTagToken()->line,$fromTagParser->getTagToken()->col);
+        }
+        return new BodyNode([],$nodes);
+    }
+
+    /**
+     * @param $tokenStream TokenStream
+     * @return AbstractNode
+     */
+    public function parse(TokenStream $tokenStream)
+    {
+        $this->tokenStream=$tokenStream;
+        $bodyNode = $this->parseBody(null);
+        return new RootNode($tokenStream->getFileName(),$bodyNode->childNodes);
     }
 }

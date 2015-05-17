@@ -39,6 +39,31 @@ class TokenStream
         return $this->test(Token::TYPE_EOF);
     }
 
+    public function lookNext()
+    {
+        $next=$this->next();
+        $this->current--;
+        return $next;
+    }
+
+    /**
+     * 移动并返回下一个token
+     * @return Token
+     * @throws ParseException
+     */
+    public function current()
+    {
+        if($this->isEOF()){
+            throw new ParseException($this->filename,'UnExpected End to template',-1,-1);
+        }
+        return $this->tokens[$this->current];
+    }
+
+    /**
+     * @param $tokenTypes
+     * @param null $tokenValue
+     * @return bool
+     */
     public function test($tokenTypes,$tokenValue=null)
     {
         if(!is_array($tokenTypes)){
@@ -62,7 +87,7 @@ class TokenStream
     {
         $this->current++;
         if($this->current >= count($this->tokens)){
-            throw new ParseException('End template');
+            throw new ParseException($this->filename,'UnExpected End to template',-1,-1);
         }
         return $this->tokens[$this->current];
     }

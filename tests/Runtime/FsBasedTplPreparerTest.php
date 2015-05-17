@@ -1,8 +1,8 @@
 <?php
-namespace Comos\Tage\Runtime;
+namespace Comos\Tage\Tests\Runtime;
 
 use Comos\Tage\Runtime\FsBasedTplPreparer;
-use Comos\Tage\TestUtil;
+use Comos\Tage\Tests\TestUtil;
 
 class FsBasedTplPreparerTest extends \PHPUnit_Framework_TestCase
 {

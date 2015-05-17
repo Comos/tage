@@ -6,8 +6,10 @@
  * Time: 下午2:39
  */
 
-namespace Comos\Tage\CodeMapping;
+namespace Comos\Tage\Tests\CodeMapping;
 
+
+use Comos\Tage\CodeMapping\MapReader;
 
 class MapReaderTest extends \PHPUnit_Framework_TestCase {
     /**

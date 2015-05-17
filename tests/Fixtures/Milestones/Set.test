@@ -11,6 +11,6 @@ return array();
 --EXPECT--
 <html>
 <body>
-<h1>hello,1,2,3</h1>
+<h1>Hello,1,2,3</h1>
 </body>
 </html>
