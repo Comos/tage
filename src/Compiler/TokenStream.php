@@ -39,10 +39,12 @@ class TokenStream
         return $this->test(Token::TYPE_EOF);
     }
 
-    public function lookNext()
+    public function lookNext($step=1)
     {
-        $next=$this->next();
-        $this->current--;
+        foreach(range(1,$step) as $i){
+            $next=$this->next();
+        }
+        $this->current-=$step;
         return $next;
     }
 

@@ -107,8 +107,9 @@ class Parser extends AbstractParser{
                     }
                     //try parse tag
                     $parseTag=false;
+                    $afterNextToken = $tokenStream->lookNext(2);
                     foreach($this->registerTags as $tagName=>$tagParser){
-                        if($tokenStream->test(Token::TYPE_NAME,$tagName)){
+                        if($tokenStream->test(Token::TYPE_NAME,$tagName) && $afterNextToken->type!=Token::TYPE_PUNCTUATION){
                             $tokenStream->next();
                             $tagParser->setRootParser($this);
                             $tagParser->setTagToken($tokenStream->current());
