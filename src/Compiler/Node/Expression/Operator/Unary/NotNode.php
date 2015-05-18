@@ -8,10 +8,10 @@ namespace Comos\Tage\Compiler\Node\Expression\Operator\Unary;
 
 use Comos\Tage\Compiler\Node\Expression\Operator\UnaryNode;
 
-class PositiveNode extends UnaryNode
+class NotNode extends UnaryNode
 {
     public function compile()
     {
-        return sprintf('(+%s)',$this->childNode->compile());
+        return sprintf('(!%s)',$this->childNode->compile());
     }
 }

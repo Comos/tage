@@ -35,12 +35,20 @@ class ExpressionParser extends AbstractParser{
     public static $coreOperators=[
         array('op'=>'+','type'=>self::OPERATOR_TYPE_UNARY,'nodeClass'=>'Comos\Tage\Compiler\Node\Expression\Operator\UnaryNode','precedence'=>500,'associativity'=>self::ASSOCIATIVITY_L2R),
         array('op'=>'-','type'=>self::OPERATOR_TYPE_UNARY,'nodeClass'=>'Comos\Tage\Compiler\Node\Expression\Operator\UnaryNode','precedence'=>500,'associativity'=>self::ASSOCIATIVITY_L2R),
+        array('op'=>'!','type'=>self::OPERATOR_TYPE_UNARY,'nodeClass'=>'Comos\Tage\Compiler\Node\Expression\Operator\UnaryNode','precedence'=>500,'associativity'=>self::ASSOCIATIVITY_L2R),
+        array('op'=>'not','type'=>self::OPERATOR_TYPE_UNARY,'nodeClass'=>'Comos\Tage\Compiler\Node\Expression\Operator\Unary\NotNode','precedence'=>500,'associativity'=>self::ASSOCIATIVITY_L2R),
         //
+        array('op'=>'..','type'=>self::OPERATOR_TYPE_BINARY,'nodeClass'=>'Comos\Tage\Compiler\Node\Expression\Operator\Binary\RangeNode','precedence'=>30,'associativity'=>self::ASSOCIATIVITY_L2R),
         array('op'=>'+','type'=>self::OPERATOR_TYPE_BINARY,'nodeClass'=>'Comos\Tage\Compiler\Node\Expression\Operator\BinaryNode','precedence'=>30,'associativity'=>self::ASSOCIATIVITY_L2R),
         array('op'=>'-','type'=>self::OPERATOR_TYPE_BINARY,'nodeClass'=>'Comos\Tage\Compiler\Node\Expression\Operator\BinaryNode','precedence'=>30,'associativity'=>self::ASSOCIATIVITY_L2R),
+        array('op'=>'~','type'=>self::OPERATOR_TYPE_BINARY,'nodeClass'=>'Comos\Tage\Compiler\Node\Expression\Operator\Binary\StringConcatNode','precedence'=>40,'associativity'=>self::ASSOCIATIVITY_L2R),
         array('op'=>'*','type'=>self::OPERATOR_TYPE_BINARY,'nodeClass'=>'Comos\Tage\Compiler\Node\Expression\Operator\BinaryNode','precedence'=>60,'associativity'=>self::ASSOCIATIVITY_L2R),
         array('op'=>'/','type'=>self::OPERATOR_TYPE_BINARY,'nodeClass'=>'Comos\Tage\Compiler\Node\Expression\Operator\BinaryNode','precedence'=>60,'associativity'=>self::ASSOCIATIVITY_L2R),
+        array('op'=>'%','type'=>self::OPERATOR_TYPE_BINARY,'nodeClass'=>'Comos\Tage\Compiler\Node\Expression\Operator\BinaryNode','precedence'=>60,'associativity'=>self::ASSOCIATIVITY_L2R),
+        array('op'=>'//','type'=>self::OPERATOR_TYPE_BINARY,'nodeClass'=>'Comos\Tage\Compiler\Node\Expression\Operator\Binary\NumericDivNode','precedence'=>60,'associativity'=>self::ASSOCIATIVITY_L2R),
+        array('op'=>'^','type'=>self::OPERATOR_TYPE_BINARY,'nodeClass'=>'Comos\Tage\Compiler\Node\Expression\Operator\Binary\PowNode','precedence'=>200,'associativity'=>self::ASSOCIATIVITY_R2L),
         //
+        array('op'=>'in','type'=>self::OPERATOR_TYPE_BINARY,'nodeClass'=>'Comos\Tage\Compiler\Node\Expression\Operator\Binary\InNode','precedence'=>20,'associativity'=>self::ASSOCIATIVITY_L2R),
         array('op'=>'>','type'=>self::OPERATOR_TYPE_BINARY,'nodeClass'=>'Comos\Tage\Compiler\Node\Expression\Operator\BinaryNode','precedence'=>20,'associativity'=>self::ASSOCIATIVITY_L2R),
         array('op'=>'<','type'=>self::OPERATOR_TYPE_BINARY,'nodeClass'=>'Comos\Tage\Compiler\Node\Expression\Operator\BinaryNode','precedence'=>20,'associativity'=>self::ASSOCIATIVITY_L2R),
         array('op'=>'>=','type'=>self::OPERATOR_TYPE_BINARY,'nodeClass'=>'Comos\Tage\Compiler\Node\Expression\Operator\BinaryNode','precedence'=>20,'associativity'=>self::ASSOCIATIVITY_L2R),
@@ -48,6 +56,8 @@ class ExpressionParser extends AbstractParser{
         array('op'=>'==','type'=>self::OPERATOR_TYPE_BINARY,'nodeClass'=>'Comos\Tage\Compiler\Node\Expression\Operator\BinaryNode','precedence'=>20,'associativity'=>self::ASSOCIATIVITY_L2R),
         array('op'=>'!=','type'=>self::OPERATOR_TYPE_BINARY,'nodeClass'=>'Comos\Tage\Compiler\Node\Expression\Operator\BinaryNode','precedence'=>20,'associativity'=>self::ASSOCIATIVITY_L2R),
         //
+        array('op'=>'&&','type'=>self::OPERATOR_TYPE_BINARY,'nodeClass'=>'Comos\Tage\Compiler\Node\Expression\Operator\BinaryNode','precedence'=>15,'associativity'=>self::ASSOCIATIVITY_L2R),
+        array('op'=>'||','type'=>self::OPERATOR_TYPE_BINARY,'nodeClass'=>'Comos\Tage\Compiler\Node\Expression\Operator\BinaryNode','precedence'=>10,'associativity'=>self::ASSOCIATIVITY_L2R),
     ];
 
     private $_binaryOperators=[];
@@ -158,7 +168,6 @@ class ExpressionParser extends AbstractParser{
         $token=$this->tokenStream->next();
         switch($token->getType()){
             case Token::TYPE_VARIABLE:
-                //TODO parse filter or sub
                 return new VarNode($token);
             case Token::TYPE_NUMBER:
             case Token::TYPE_STRING:

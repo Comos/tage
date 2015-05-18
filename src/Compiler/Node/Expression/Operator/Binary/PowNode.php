@@ -8,10 +8,11 @@ namespace Comos\Tage\Compiler\Node\Expression\Operator\Binary;
 
 use Comos\Tage\Compiler\Node\Expression\Operator\BinaryNode;
 
-class MultiNode extends BinaryNode
+class PowNode extends BinaryNode
 {
     public function compile()
     {
-        return sprintf('(%s*%s)',$this->leftNode->compile(),$this->rightNode->compile());
+        return sprintf('pow(%s,%s)',$this->leftNode->compile(),$this->rightNode->compile());
     }
+
 }
