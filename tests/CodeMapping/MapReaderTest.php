@@ -9,19 +9,22 @@
 namespace Comos\Tage\CodeMapping;
 
 
-class MapReaderTest extends \PHPUnit_Framework_TestCase {
+class MapReaderTest extends \PHPUnit_Framework_TestCase
+{
     /**
      * @param $list
      * @param $line
      * @param $expected
      * @dataProvider providerOfTestGetSectionOffset
      */
-    public function testGetSectionOffset($list, $line, $expected) {
+    public function testGetSectionOffset($list, $line, $expected)
+    {
         $actual = MapReader::getSectionIndex($list, $line);
-        $this->assertEquals($expected,$actual);
+        $this->assertEquals($expected, $actual);
     }
 
-    public function providerOfTestGetSectionOffset() {
+    public function providerOfTestGetSectionOffset()
+    {
         return array(
             array(
                 //list,  line,   expected
@@ -55,13 +58,28 @@ class MapReaderTest extends \PHPUnit_Framework_TestCase {
      * @param $expectedSourceLine
      * @dataProvider providerOfGetSourceLine
      */
-    public function testGetSourceLine($data, $targetLine, $expectedSourceLine) {
+    public function testGetSourceLine($data, $targetLine, $expectedSourceLine)
+    {
         $reader = new MapReader($data);
         $sourceLine = $reader->getSourceLine($targetLine);
         $this->assertEquals($expectedSourceLine, $sourceLine, "target line: $targetLine");
     }
 
-    public function providerOfGetSourceLine() {
+    /**
+     * @param $data
+     * @param $targetLine
+     * @param $expectedSourceLine
+     * @dataProvider providerOfGetSourceLine
+     */
+    public function testFromSerializedData($data, $targetLine, $expectedSourceLine)
+    {
+        $reader = MapReader::fromSerializedData(serialize($data));
+        $sourceLine = $reader->getSourceLine($targetLine);
+        $this->assertEquals($expectedSourceLine, $sourceLine, "target line: $targetLine");
+    }
+
+    public function providerOfGetSourceLine()
+    {
         $defaultMap = array(
             's' => array(0, 10, 13, 15),
             't' => array(0, 10, 18, 25),

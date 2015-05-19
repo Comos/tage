@@ -13,15 +13,33 @@ class MapReader
     private $sourceLines;
     private $targetLines;
 
+    /**
+     * @param string $serializedData
+     * @return MapReader
+     * @throws \InvalidArgumentException
+     */
+    public static function fromSerializedData($serializedData) {
+        $data = unserialize($serializedData);
+        return new MapReader($data);
+    }
+
+    /**
+     * @param array $data
+     * @throws \InvalidArgumentException
+     */
     public function __construct($data)
     {
         if (!is_array($data) || !isset($data['s']) || !isset($data['t'])) {
-            throw new InvalidArgumentException('invalid mapping data');
+            throw new \InvalidArgumentException('invalid mapping data');
         }
         $this->sourceLines = $data['s'];
         $this->targetLines = $data['t'];
     }
 
+    /**
+     * @param $targetLine
+     * @return int
+     */
     public function getSourceLine($targetLine)
     {
         $sectionIndex = self::getSectionIndex($this->targetLines, $targetLine);
@@ -39,10 +57,10 @@ class MapReader
     }
 
     /**
-     * @param $list
-     * @param $line
-     * @param $from
-     * @param $to
+     * @param array $list
+     * @param int $line
+     * @param int $from
+     * @param int $to
      * @return int
      */
     public static function getSectionIndex($list, $line, $from = 0, $to = null)
