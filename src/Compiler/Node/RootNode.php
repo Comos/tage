@@ -20,7 +20,7 @@ class RootNode extends AbstractNode
     public function compile(){
         $tpl=<<<'PHP'
 <?php
-use Tage\Runtime\AbstractTemplate;
+use Comos\Tage\Runtime\AbstractTemplate;
 
 PHP;
         $tpl.=sprintf('class _Tage_Compiled_Template_%s extends AbstractTemplate',md5($this->fileName));

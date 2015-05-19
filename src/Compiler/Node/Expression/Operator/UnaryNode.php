@@ -4,9 +4,9 @@
  * Date: 15-3-7
  * Time: 上午4:31
  */
-namespace Tage\Compiler\Node\Expression;
+namespace Comos\Tage\Compiler\Node\Expression\Operator;
 
-use Tage\Compiler\Node\AbstractNode;
+use Comos\Tage\Compiler\Node\AbstractNode;
 
 class UnaryNode extends AbstractNode
 {
@@ -14,4 +14,19 @@ class UnaryNode extends AbstractNode
      * @var AbstractNode
      */
     protected $childNode;
+
+    protected $opToken;
+
+    public function __construct(array $tokens, array $childNodes = [])
+    {
+        parent::__construct($tokens, $childNodes);
+        $this->childNode=$childNodes[0];
+        $this->opToken = $tokens['op'];
+    }
+
+    public function compile()
+    {
+        return sprintf('(%s%s)',$this->opToken->getValue(),$this->childNode->compile());
+    }
+
 }

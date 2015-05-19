@@ -6,9 +6,6 @@
  */
 namespace Comos\Tage;
 
-use Comos\Tage\Compiler\Parser\Parser;
-use Comos\Tage\Tage;
-
 class TageTestCase extends \PHPUnit_Framework_TestCase
 {
 
@@ -93,6 +90,7 @@ class TageTestCase extends \PHPUnit_Framework_TestCase
      * @param string $path            
      * @param string $content            
      * @return string
+     * @throws \Exception
      */
     protected function prepareSourceTpl($path, $content)
     {

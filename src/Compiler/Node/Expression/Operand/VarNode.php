@@ -4,10 +4,10 @@
  * Date: 15-3-7
  * Time: 上午4:34
  */
-namespace Tage\Compiler\Node\Expression\Operand;
+namespace Comos\Tage\Compiler\Node\Expression\Operand;
 
-use Tage\Compiler\Node\AbstractNode;
-use Tage\Compiler\Token;
+use Comos\Tage\Compiler\Node\AbstractNode;
+use Comos\Tage\Compiler\Token;
 
 class VarNode extends AbstractNode
 {

@@ -27,7 +27,7 @@ class Autoloader
             require $file;
             return;
         }
-        if (\file_exists($file = \dirname(__DIR__) . '/tests/' .\str_replace('\\', '/', $class) . '.php')) {
+        if (\file_exists($file = dirname(__DIR__) . DIRECTORY_SEPARATOR. 'tests' . DIRECTORY_SEPARATOR . '/' .\str_replace('\\', '/', $class) . '.php')) {
             require $file;
         }
     }

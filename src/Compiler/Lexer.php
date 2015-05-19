@@ -6,6 +6,7 @@
  */
 
 namespace Comos\Tage\Compiler;
+use Comos\Tage\Exception;
 
 /**
  * Class Lexer
@@ -44,7 +45,7 @@ class Lexer
         );
         //$var.name func() func(p1,p2)
         self::$PUNCTUATIONS = str_split('(){}.,|');
-        self::$OPERATORS=array_merge(str_split('+-*/%='),['==','!=','>','<','>=','<=','&&','||']);
+        self::$OPERATORS=array_merge(['==','!=','>=','<=','&&','||','..','in','not','//','~','>','<','!'],str_split('+-*/%^?:='));
         self::$NUMBER_CHARS = str_split('0123456789');
     }
 
@@ -66,7 +67,7 @@ class Lexer
             }
             if(function_exists('mb_detect_encoding')){
                 if(mb_detect_encoding($tplCode,'utf-8,ascii,iso-8859-1') === false){
-                    throw new LexerException('must use ascii compatible encoding');
+                    throw new Exception('must use ascii compatible encoding');
                 }
             }
 
@@ -152,8 +153,8 @@ class Lexer
             if($this->test('$')){ //Variable
                 $this->tokens[]=$this->lexVar();
             }
-            else if($this->test(self::$PUNCTUATIONS)){//Punctuations
-                $this->tokens[]=$this->lexPunctuation();
+            else if($this->test(self::$OPERATORS)){
+                $this->tokens[]=$this->lexOperator();
             }
             else if($this->test(self::$NAME_HEAD_CHARS)){//Name
                 $this->tokens[]=$this->lexName();
@@ -164,8 +165,8 @@ class Lexer
             else if($this->test(self::$NUMBER_CHARS)){ //Number
                 $this->tokens[]=$this->lexNumber();
             }
-            else if($this->test(self::$OPERATORS)){
-                $this->tokens[]=$this->lexOperator();
+            else if($this->test(self::$PUNCTUATIONS)){//Punctuations
+                $this->tokens[]=$this->lexPunctuation();
             }
             else{
                 throw new LexerException($this->filename,'Invalid token ('.$this->sub_str($this->cursor, $this->cursor+10).')',$this->line,$this->col);
@@ -204,6 +205,10 @@ class Lexer
         while($this->test(self::$NUMBER_CHARS)){
             $this->forward();
             $isEPreNumber=true;
+        }
+        //避免与operator冲突
+        if($this->test(self::$OPERATORS)){
+            return new Token(Token::TYPE_NUMBER,$this->sub_str($start,$this->cursor-1),$line,$col);
         }
         if($this->test('.')){
             $isEPreNumber=false;

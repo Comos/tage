@@ -8,10 +8,10 @@
  * User: 13leaf
  */
 require_once join(DIRECTORY_SEPARATOR,[__DIR__,'..','src','Autoloader.php']);
-Tage\Autoloader::register();
+Comos\Tage\Autoloader::register();
 $code = isset($_REQUEST['code'])?$_REQUEST['code']:'{{"Hello world"}}';
 ?>
-
+<!DOCTYPE HTML>
 <html>
 <head>
     <meta charset="utf-8">
@@ -96,24 +96,24 @@ $code = isset($_REQUEST['code'])?$_REQUEST['code']:'{{"Hello world"}}';
 </head>
 <body>
 <form method="post">
-    <h1>Tage Lexer Demo</h1>
+    <h1><a href="/">Home</a>/Tage Lexer Demo</h1>
     <pre class="code">
     <div class="line-number"></div>
 <?php
 if(!empty($code)){
     try{
-    $lexer = new \Tage\Compiler\Lexer();
+    $lexer = new \Comos\Tage\Compiler\Lexer();
     $tokenStream=$lexer->lex($code,'TageLexerDemoCode');
     $defaultTypeStringMap=array(
-        \Tage\Compiler\Token::TYPE_TAG_START=>'{{',
-        \Tage\Compiler\Token::TYPE_TAG_END=>"}}",
-        \Tage\Compiler\Token::TYPE_TEXT=>' '
+        \Comos\Tage\Compiler\Token::TYPE_TAG_START=>'{{',
+        \Comos\Tage\Compiler\Token::TYPE_TAG_END=>"}}",
+        \Comos\Tage\Compiler\Token::TYPE_TEXT=>' '
     );
     $lastLine=0;
     $lastToken=null;
     while(!$tokenStream->isEOF()){
         $token=$tokenStream->next();
-        $type = \Tage\Compiler\Token::typeToString($token->type);
+        $type = \Comos\Tage\Compiler\Token::typeToString($token->type);
         $val = trim($token->value);
         if(empty($val)){
             $val = $defaultTypeStringMap[$token->type];

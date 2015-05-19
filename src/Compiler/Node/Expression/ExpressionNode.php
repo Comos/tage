@@ -4,9 +4,9 @@
  * Date: 15-3-7
  * Time: 上午4:18
  */
-namespace Tage\Compiler\Node\Expression;
+namespace Comos\Tage\Compiler\Node\Expression;
 
-use Tage\Compiler\Node\AbstractNode;
+use Comos\Tage\Compiler\Node\AbstractNode;
 
 abstract class ExpressionNode extends AbstractNode
 {

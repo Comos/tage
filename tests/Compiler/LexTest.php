@@ -6,8 +6,7 @@
  */
 namespace Comos\Tage\Compiler;
 
-use Comos\Tage\Compiler\Lexer;
-use Comos\Tage\Compiler\Token;
+
 use Comos\Tage\TageTestCase;
 
 class LexTest extends TageTestCase

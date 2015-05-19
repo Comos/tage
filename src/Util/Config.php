@@ -15,9 +15,9 @@ class Config
     protected $data;
 
     /**
-     *
-     * @param array $data            
-     * @throws InvalidArgumentException
+     * @param array|\ArrayAccess $data
+     * @return Config
+     * @throws \InvalidArgumentException
      */
     public static function fromArray($data)
     {
@@ -51,9 +51,10 @@ class Config
         return strval($this->data[$key]);
     }
     /**
-     * get string field value in restric mode.
-     * @param $mix $key
-     * @throws Tage\Util\ConfigException
+     * get string field value in restrict mode.
+     * @param mix $key
+     * @throws ConfigException
+     * @return string
      */
     public function rstr($key)
     {

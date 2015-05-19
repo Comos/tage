@@ -6,7 +6,7 @@
  */
 namespace Comos\Tage\Compiler;
 
-use Tage\TageException;
+use Comos\Tage\TageException;
 
 class Token
 {
