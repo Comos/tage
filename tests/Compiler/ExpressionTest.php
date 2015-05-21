@@ -22,6 +22,8 @@ class ExpressionTest extends TageTestCase
             ['null','(null)'],
             ['[]','array()'],
             ['[1,2,3]','array((1),(2),(3))'],
+            ['{1,2,3}','array((1),(2),(3))'],//compatible json
+            ['{1:1,2:2,3:3}','array((1)=>(1),(2)=>(2),(3)=>(3))'],//compatible json
             ['[1,2,3,]','array((1),(2),(3))'],//trailing
             ['[$x:$y,1:true]','array(($x)=>($y),(1)=>(true))'],
             ['[$x:[5,6],9:[1:1,2:2,3]]','array(($x)=>array((5),(6)),(9)=>array((1)=>(1),(2)=>(2),(3)))'],

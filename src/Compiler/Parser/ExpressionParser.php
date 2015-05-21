@@ -175,34 +175,37 @@ class ExpressionParser extends AbstractParser{
             $exp=$this->parsePrimary();
             return $this->makeUnaryNode($opToken, $exp);
         }
-        //
+        //bracket
         if($this->tokenStream->test(Token::TYPE_PUNCTUATION,'(')){
             $this->tokenStream->next();
             $node = $this->parseExp(0);
             $this->tokenStream->expect(Token::TYPE_PUNCTUATION, ')');
             return $node;
         }
-        if($this->tokenStream->test(Token::TYPE_PUNCTUATION,'[')){
-            $this->tokenStream->next();
+        //array
+        if($this->tokenStream->test(Token::TYPE_PUNCTUATION,'[') || $this->tokenStream->test(Token::TYPE_PUNCTUATION,'{')){
+            $arrayToken=$this->tokenStream->next();
             $arrayNodes=[];
+            $endPunctuation = $arrayToken->value=='['?']':'}';
             while(!$this->tokenStream->isEOF()
-                    && !$this->tokenStream->test(Token::TYPE_PUNCTUATION,']')) {
+                    && !$this->tokenStream->test(Token::TYPE_PUNCTUATION,$endPunctuation)) {
                 $node = $this->parseExp(0);
                 if($this->tokenStream->test(Token::TYPE_OPERATOR,':')){
                     $this->tokenStream->next();
                     //XXX check keyNode constant?
                     $valueNode = $this->parseExp(0);
-                    $arrayNodes[] = new ArrayItemNode([], ['key'=>$node,'value'=>$valueNode]);
+                    $arrayNodes[] = new ArrayItemNode([$arrayToken], ['key'=>$node,'value'=>$valueNode]);
                 }else{
-                    $arrayNodes[]=new ArrayItemNode([],['value'=>$node]);
+                    $arrayNodes[]=new ArrayItemNode([$arrayToken],['value'=>$node]);
                 }
                 if($this->tokenStream->test(Token::TYPE_PUNCTUATION,',')){
                     $this->tokenStream->next();
                 }
             }
-            $this->tokenStream->expect(Token::TYPE_PUNCTUATION, ']');
+            $this->tokenStream->expect(Token::TYPE_PUNCTUATION, $endPunctuation);
             return new ArrayNode([],$arrayNodes);
         }
+        //constant/filter/function
         $token=$this->tokenStream->next();
         switch($token->getType()){
             case Token::TYPE_VARIABLE:

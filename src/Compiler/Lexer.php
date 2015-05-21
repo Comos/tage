@@ -143,7 +143,7 @@ class Lexer
 
             $this->skipBlankOrNewLine();
 
-            if($this->test('}}'))
+            if($this->test('}}') && !$this->test('}}}'))//XXX {{ {1:x}}}
             {
                 $this->tokens[]=new Token(Token::TYPE_TAG_END,'}}',$this->line,$this->col) ;
                 $this->skip(strlen('}}'));
