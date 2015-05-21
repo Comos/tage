@@ -20,6 +20,11 @@ class ExpressionTest extends TageTestCase
             ['true','(true)'],
             ['false','(false)'],
             ['null','(null)'],
+            ['[]','array()'],
+            ['[1,2,3]','array((1),(2),(3))'],
+            ['[1,2,3,]','array((1),(2),(3))'],//trailing
+            ['[$x:$y,1:true]','array(($x)=>($y),(1)=>(true))'],
+            ['[$x:[5,6],9:[1:1,2:2,3]]','array(($x)=>array((5),(6)),(9)=>array((1)=>(1),(2)=>(2),(3)))'],
             //unary
             ['-123','(-(123))'],
             ['+123.45','(+(123.45))'],
@@ -47,6 +52,10 @@ class ExpressionTest extends TageTestCase
             ['$a+-$b+1','((($a)+(-($b)))+(1))'],
             ['3+4*5','((3)+((4)*(5)))'],
             ['(3+4)/6','(((3)+(4))/(6))'],
+
+            //ternary
+            ['true?1:0','((true)?(1):(0))'],
+            ['true?$if?$yes:$no:$else?$elseYes:$elseNo','((true)?(($if)?($yes):($no)):(($else)?($elseYes):($elseNo)))'],
         ];
     }
 

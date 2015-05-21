@@ -6,8 +6,11 @@
  */
 namespace Comos\Tage\Compiler\Parser;
 
+use Comos\Tage\Compiler\Node\Expression\Operand\ArrayItemNode;
+use Comos\Tage\Compiler\Node\Expression\Operand\ArrayNode;
 use Comos\Tage\Compiler\Node\Expression\Operand\ConstantNode;
 use Comos\Tage\Compiler\Node\Expression\Operand\VarNode;
+use Comos\Tage\Compiler\Node\Expression\Operator\TernaryNode;
 use Comos\Tage\Compiler\ParseException;
 use Comos\Tage\Compiler\Token;
 use Comos\Tage\Compiler\TokenStream;
@@ -128,8 +131,12 @@ class ExpressionParser extends AbstractParser{
         return new $opConf['nodeClass'](['op'=>$opToken],[$node]);
     }
 
-    //to use precedence climbing
-    //http://blog.fengwang.org.cn/2015/05/14/%E4%BD%BF%E7%94%A8%E9%80%92%E5%BD%92%E4%B8%8B%E9%99%8D%E5%88%86%E6%9E%90%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%91%E5%9B%9B/
+    /**
+     * @param $precedence
+     * @return ExpressionNode
+     * use precedence climbing
+     * http://blog.fengwang.org.cn/2015/05/14/%E4%BD%BF%E7%94%A8%E9%80%92%E5%BD%92%E4%B8%8B%E9%99%8D%E5%88%86%E6%9E%90%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%91%E5%9B%9B/
+     */
     public function parseExp($precedence)
     {
         $exp=$this->parsePrimary();
@@ -140,14 +147,24 @@ class ExpressionParser extends AbstractParser{
             $right=$this->parseExp($opConf['associativity']==self::ASSOCIATIVITY_L2R?$opConf['precedence']+1:$opConf['precedence']);
             $exp = $this->makeBinaryNode($opToken, $exp, $right);
         }
-        return $exp;
+        return $this->parseTernary($exp);
     }
 
-
-
-    public function parseTernary()
+    /**
+     * to parse ternary:exp?exp:exp
+     * @param $exp
+     * @return TernaryNode
+     */
+    public function parseTernary($exp)
     {
-
+        if($this->tokenStream->test(Token::TYPE_OPERATOR,'?')){
+            $this->tokenStream->next();
+            $ifBodyNode=$this->parseExp(0);
+            $this->tokenStream->expect(Token::TYPE_OPERATOR, ':');
+            $elseBodyNode = $this->parseExp(0);
+            return new TernaryNode([],['if'=>$exp,'ifBody'=>$ifBodyNode,'elseBody'=>$elseBodyNode]);
+        }
+        return $exp;
     }
 
     public function parsePrimary()
@@ -164,6 +181,27 @@ class ExpressionParser extends AbstractParser{
             $node = $this->parseExp(0);
             $this->tokenStream->expect(Token::TYPE_PUNCTUATION, ')');
             return $node;
+        }
+        if($this->tokenStream->test(Token::TYPE_PUNCTUATION,'[')){
+            $this->tokenStream->next();
+            $arrayNodes=[];
+            while(!$this->tokenStream->isEOF()
+                    && !$this->tokenStream->test(Token::TYPE_PUNCTUATION,']')) {
+                $node = $this->parseExp(0);
+                if($this->tokenStream->test(Token::TYPE_OPERATOR,':')){
+                    $this->tokenStream->next();
+                    //XXX check keyNode constant?
+                    $valueNode = $this->parseExp(0);
+                    $arrayNodes[] = new ArrayItemNode([], ['key'=>$node,'value'=>$valueNode]);
+                }else{
+                    $arrayNodes[]=new ArrayItemNode([],['value'=>$node]);
+                }
+                if($this->tokenStream->test(Token::TYPE_PUNCTUATION,',')){
+                    $this->tokenStream->next();
+                }
+            }
+            $this->tokenStream->expect(Token::TYPE_PUNCTUATION, ']');
+            return new ArrayNode([],$arrayNodes);
         }
         $token=$this->tokenStream->next();
         switch($token->getType()){
