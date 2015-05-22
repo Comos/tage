@@ -9,6 +9,7 @@ namespace Comos\Tage\Compiler\Parser;
 use Comos\Tage\Compiler\Node\Expression\Operand\ArrayItemNode;
 use Comos\Tage\Compiler\Node\Expression\Operand\ArrayNode;
 use Comos\Tage\Compiler\Node\Expression\Operand\ConstantNode;
+use Comos\Tage\Compiler\Node\Expression\Operand\FunctionNode;
 use Comos\Tage\Compiler\Node\Expression\Operand\VarNode;
 use Comos\Tage\Compiler\Node\Expression\Operator\TernaryNode;
 use Comos\Tage\Compiler\ParseException;
@@ -139,6 +140,7 @@ class ExpressionParser extends AbstractParser{
      */
     public function parseExp($precedence)
     {
+        //TODO add dot syntax and filter
         $exp=$this->parsePrimary();
         while($this->inBinaryOperator($this->tokenStream->lookNext())
             && $this->getOperatorConf(self::OPERATOR_TYPE_BINARY,$this->tokenStream->lookNext()->getValue())['precedence']>=$precedence ){
@@ -158,54 +160,95 @@ class ExpressionParser extends AbstractParser{
     public function parseTernary($exp)
     {
         if($this->tokenStream->test(Token::TYPE_OPERATOR,'?')){
-            $this->tokenStream->next();
+            $startToken=$this->tokenStream->next();
             $ifBodyNode=$this->parseExp(0);
             $this->tokenStream->expect(Token::TYPE_OPERATOR, ':');
             $elseBodyNode = $this->parseExp(0);
-            return new TernaryNode([],['if'=>$exp,'ifBody'=>$ifBodyNode,'elseBody'=>$elseBodyNode]);
+            return new TernaryNode([$startToken],['if'=>$exp,'ifBody'=>$ifBodyNode,'elseBody'=>$elseBodyNode]);
         }
         return $exp;
+    }
+
+    public function parseUnary()
+    {
+        $opToken=$this->tokenStream->next();
+        $exp=$this->parsePrimary();
+        return $this->makeUnaryNode($opToken, $exp);
+    }
+
+    public function parseBracket()
+    {
+        $this->tokenStream->next();
+        $node = $this->parseExp(0);
+        $this->tokenStream->expect(Token::TYPE_PUNCTUATION, ')');
+        return $node;
+    }
+
+    public function parseArray()
+    {
+        $arrayToken=$this->tokenStream->next();
+        $arrayNodes=[];
+        $endPunctuation = $arrayToken->value=='['?']':'}';
+        while(!$this->tokenStream->isEOF()
+            && !$this->tokenStream->test(Token::TYPE_PUNCTUATION,$endPunctuation)) {
+            $node = $this->parseExp(0);
+            if($this->tokenStream->test(Token::TYPE_OPERATOR,':')){
+                $this->tokenStream->next();
+                //XXX check keyNode constant?
+                $valueNode = $this->parseExp(0);
+                $arrayNodes[] = new ArrayItemNode([$arrayToken], ['key'=>$node,'value'=>$valueNode]);
+            }else{
+                $arrayNodes[]=new ArrayItemNode([$arrayToken],['value'=>$node]);
+            }
+            if($this->tokenStream->test(Token::TYPE_PUNCTUATION,',')){
+                $this->tokenStream->next();
+            }
+        }
+        $this->tokenStream->expect(Token::TYPE_PUNCTUATION, $endPunctuation);
+        return new ArrayNode([$arrayToken],$arrayNodes);
+    }
+
+    public function parseFunction()
+    {
+        $funcNameToken=$this->tokenStream->next();
+        $this->tokenStream->expect(Token::TYPE_PUNCTUATION,'(');
+        $argNodes=[];
+        while(!$this->tokenStream->isEOF()){
+            if($this->tokenStream->test(Token::TYPE_PUNCTUATION,')')){
+                break;
+            }
+            $argNodes[] = $this->parseExp(0);
+            if(!$this->tokenStream->test(Token::TYPE_PUNCTUATION,')')){
+                $this->tokenStream->expect(Token::TYPE_PUNCTUATION, ',');
+            }
+        }
+        $this->tokenStream->expect(Token::TYPE_PUNCTUATION, ')');
+        return new FunctionNode(['funcName'=>$funcNameToken],$argNodes);
     }
 
     public function parsePrimary()
     {
         //unary
         if($this->inUnaryOperator($this->tokenStream->lookNext())){
-            $opToken=$this->tokenStream->next();
-            $exp=$this->parsePrimary();
-            return $this->makeUnaryNode($opToken, $exp);
+            return $this->parseUnary();
         }
         //bracket
         if($this->tokenStream->test(Token::TYPE_PUNCTUATION,'(')){
-            $this->tokenStream->next();
-            $node = $this->parseExp(0);
-            $this->tokenStream->expect(Token::TYPE_PUNCTUATION, ')');
-            return $node;
+            return $this->parseBracket();
         }
         //array
         if($this->tokenStream->test(Token::TYPE_PUNCTUATION,'[') || $this->tokenStream->test(Token::TYPE_PUNCTUATION,'{')){
-            $arrayToken=$this->tokenStream->next();
-            $arrayNodes=[];
-            $endPunctuation = $arrayToken->value=='['?']':'}';
-            while(!$this->tokenStream->isEOF()
-                    && !$this->tokenStream->test(Token::TYPE_PUNCTUATION,$endPunctuation)) {
-                $node = $this->parseExp(0);
-                if($this->tokenStream->test(Token::TYPE_OPERATOR,':')){
-                    $this->tokenStream->next();
-                    //XXX check keyNode constant?
-                    $valueNode = $this->parseExp(0);
-                    $arrayNodes[] = new ArrayItemNode([$arrayToken], ['key'=>$node,'value'=>$valueNode]);
-                }else{
-                    $arrayNodes[]=new ArrayItemNode([$arrayToken],['value'=>$node]);
-                }
-                if($this->tokenStream->test(Token::TYPE_PUNCTUATION,',')){
-                    $this->tokenStream->next();
-                }
-            }
-            $this->tokenStream->expect(Token::TYPE_PUNCTUATION, $endPunctuation);
-            return new ArrayNode([],$arrayNodes);
+            return $this->parseArray();
         }
-        //constant/filter/function
+        if($this->tokenStream->test(Token::TYPE_NAME)){
+            //constant val eg: null
+            if(in_array(strtolower($this->tokenStream->lookNext()->getValue()),['null','true','false'])){
+                return new ConstantNode($this->tokenStream->next());
+            }else{
+                //function eg: test()
+                return $this->parseFunction();
+            }
+        }
         $token=$this->tokenStream->next();
         switch($token->getType()){
             case Token::TYPE_VARIABLE:
@@ -213,14 +256,6 @@ class ExpressionParser extends AbstractParser{
             case Token::TYPE_NUMBER:
             case Token::TYPE_STRING:
                 return new ConstantNode($token);
-            case Token::TYPE_NAME:
-                if(in_array(strtolower($token->getValue()),['null','true','false'])){
-                    return new ConstantNode($token);
-                }else{
-                    //TODO parseFunction
-                    throw new TageException('no implement');
-                    $this->tokenStream->expect(Token::TYPE_PUNCTUATION,'(');
-                }
             default:
                 throw new ParseException($this->tokenStream->getFileName(),'unexpected '.$token->getValue(),$token->line,$token->col);
         }

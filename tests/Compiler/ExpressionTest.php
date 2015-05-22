@@ -27,6 +27,9 @@ class ExpressionTest extends TageTestCase
             ['[1,2,3,]','array((1),(2),(3))'],//trailing
             ['[$x:$y,1:true]','array(($x)=>($y),(1)=>(true))'],
             ['[$x:[5,6],9:[1:1,2:2,3]]','array(($x)=>array((5),(6)),(9)=>array((1)=>(1),(2)=>(2),(3)))'],
+            ['func()','func()'],
+            ['func($x)','func(($x))'],
+            ['func($x,[1,2,3])','func(($x),array((1),(2),(3)))'],
             //unary
             ['-123','(-(123))'],
             ['+123.45','(+(123.45))'],
