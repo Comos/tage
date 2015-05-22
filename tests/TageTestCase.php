@@ -16,7 +16,8 @@ class TageTestCase extends \PHPUnit_Framework_TestCase
             'TEMPLATE',
             'DATA',
             'EXPECT',
-            'EXCEPTION'
+            'EXCEPTION',
+            'INCLUDE',
         ];
         $justDirectives = array_map(function ($x)
         {
@@ -43,6 +44,11 @@ class TageTestCase extends \PHPUnit_Framework_TestCase
         }
         
         try {
+            if(isset($parseConfig['--INCLUDE--'])){
+                foreach(explode(',',trim($parseConfig['--INCLUDE--'])) as $includeTpl){
+                    $this->prepareSourceTpl($includeTpl,file_get_contents(dirname($path).'/include/'.$includeTpl));
+                }
+            }
             $tplName = $this->prepareSourceTpl($path, $template);
             
             $tage = new Tage([
@@ -94,7 +100,7 @@ class TageTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function prepareSourceTpl($path, $content)
     {
-        $filename = md5($path) . '.tpl';
+        $filename = basename($path,'.tpl') . '.tpl';
         $path = $this->_tplDir . '/' . $filename;
         $r = file_put_contents($path, $content);
         if ($r === false) {

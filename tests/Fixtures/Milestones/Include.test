@@ -1,0 +1,18 @@
+--TEST--
+milestone2
+--TEMPLATE--
+<base>
+{{include "include1.tpl" with ['bar':$bar]}}
+</base>
+--DATA--
+return array('bar'=>'Hello World');
+--EXPECT--
+<base>
+<html>
+<body>
+<h1>Hello World</h1>
+</body>
+</html>
+</base>
+--INCLUDE--
+include1.tpl

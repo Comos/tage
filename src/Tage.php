@@ -67,7 +67,7 @@ class Tage
 
     /**
      *
-     * @return \Tage\Runtime\Runtime
+     * @return \Comos\Tage\Runtime\Runtime
      */
     public function getRuntime()
     {

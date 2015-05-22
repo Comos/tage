@@ -45,7 +45,7 @@ class Lexer
         );
         //$var.name func() func(p1,p2)
         self::$PUNCTUATIONS = str_split('()[]{}.,|');
-        self::$OPERATORS=array_merge(['==','!=','>=','<=','&&','||','..','in','not','//','~','>','<','!'],str_split('+-*/%^?:='));
+        self::$OPERATORS=array_merge(['==','!=','>=','<=','&&','||','..','in ','not ','//','~','>','<','!'],str_split('+-*/%^?:='));
         self::$NUMBER_CHARS = str_split('0123456789');
     }
 
@@ -182,7 +182,7 @@ class Lexer
         if($len=$this->test(self::$OPERATORS)){
             $this->skip($len);
         }
-        return new Token(Token::TYPE_OPERATOR,$this->sub_str($start,$this->cursor-1),$line,$col);
+        return new Token(Token::TYPE_OPERATOR,trim($this->sub_str($start,$this->cursor-1)),$line,$col);
     }
 
     public function lexPunctuation()

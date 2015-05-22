@@ -13,7 +13,7 @@ class CommonTagNode extends AbstractNode
 
     public function __construct($tagParser)
     {
-        parent::__construct([], $tagParser->getAttributes());
+        parent::__construct(['tag'=>$tagParser->getTagToken()], $tagParser->getAttributes());
         $this->tagParser=$tagParser;
     }
 

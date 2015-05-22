@@ -29,7 +29,7 @@ class IfTagParser extends TagParser
         $this->ifConditionNode = $this->getExpressionParser()->parse($tokenStream);
         $tokenStream->expect(Token::TYPE_TAG_END);
         $this->ifBodyNode= $this->rootParser->parseBody($this);
-        return new IfNode([],[
+        return new IfNode(['tag'=>$this->tagToken],[
             'if'=>$this->ifConditionNode,
             'ifBody'=>$this->ifBodyNode,
             'elseIfs'=>$this->elseIfConditionNodeList,

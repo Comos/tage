@@ -37,6 +37,9 @@ abstract class TagParser extends AbstractParser
         return $this->tagToken;
     }
 
+    /**
+     * @return ExpressionParser
+     */
     public function getExpressionParser()
     {
         return $this->rootParser->getExpressionParser();
