@@ -61,6 +61,14 @@ class ExpressionTest extends TageTestCase
             //ternary
             ['true?1:0','((true)?(1):(0))'],
             ['true?$if?$yes:$no:$else?$elseYes:$elseNo','((true)?(($if)?($yes):($no)):(($else)?($elseYes):($elseNo)))'],
+
+            //dot
+            ['$x.y','$this->getAttribute(($x),"y")'],
+            ['$x["y"]','$this->getAttribute(($x),("y"))'],
+            ['$x[0]','$this->getAttribute(($x),(0))'],
+            ['$x.y()','$this->callMethod(($x),"y",array())'],
+            ['$x.y.z($a)','$this->callMethod($this->getAttribute(($x),"y"),"z",array(($a)))'],
+            ['$x["y"].z($a)','$this->callMethod($this->getAttribute(($x),("y")),"z",array(($a)))'],
         ];
     }
 

@@ -8,8 +8,11 @@ namespace Comos\Tage\Compiler\Parser;
 
 use Comos\Tage\Compiler\Node\Expression\Operand\ArrayItemNode;
 use Comos\Tage\Compiler\Node\Expression\Operand\ArrayNode;
+use Comos\Tage\Compiler\Node\Expression\Operand\AttributeNameNode;
+use Comos\Tage\Compiler\Node\Expression\Operand\AttributeNode;
 use Comos\Tage\Compiler\Node\Expression\Operand\ConstantNode;
 use Comos\Tage\Compiler\Node\Expression\Operand\FunctionNode;
+use Comos\Tage\Compiler\Node\Expression\Operand\MethodNode;
 use Comos\Tage\Compiler\Node\Expression\Operand\VarNode;
 use Comos\Tage\Compiler\Node\Expression\Operator\TernaryNode;
 use Comos\Tage\Compiler\ParseException;
@@ -210,7 +213,7 @@ class ExpressionParser extends AbstractParser{
 
     public function parseFunction()
     {
-        $funcNameToken=$this->tokenStream->next();
+        $funcNameToken = $this->tokenStream->expect(Token::TYPE_NAME);
         $this->tokenStream->expect(Token::TYPE_PUNCTUATION,'(');
         $argNodes=[];
         while(!$this->tokenStream->isEOF()){
@@ -224,6 +227,36 @@ class ExpressionParser extends AbstractParser{
         }
         $this->tokenStream->expect(Token::TYPE_PUNCTUATION, ')');
         return new FunctionNode(['funcName'=>$funcNameToken],$argNodes);
+    }
+
+    /**
+     */
+    public function parseAttributeOrMethod()
+    {
+        $exprToken = $this->tokenStream->expect(Token::TYPE_VARIABLE);//start by variable
+        $exprNode=new VarNode($exprToken);
+        while(!$this->tokenStream->isEOF()){
+            if($this->tokenStream->test(Token::TYPE_PUNCTUATION,'.')){
+                $this->tokenStream->next();
+                //not function
+                if($this->tokenStream->test(Token::TYPE_NAME) && $this->tokenStream->lookNext(2)->value != '('){
+                    $nameToken=$this->tokenStream->next();
+                    $rightNode=new AttributeNameNode(['name'=>$nameToken]);
+                    $exprNode=new AttributeNode([$nameToken],['left'=>$exprNode,'right'=>$rightNode]);
+                }else{
+                    $rightNode=$this->parseFunction();
+                    $exprNode=new MethodNode([$rightNode->tokens['funcName']],['left'=>$exprNode,'right'=>$rightNode]);
+                }
+            }else if($this->tokenStream->test(Token::TYPE_PUNCTUATION,'[')){
+                $this->tokenStream->next();
+                $rightNode=$this->parsePrimary();
+                $exprNode = new AttributeNode([$exprToken],['left'=>$exprNode,'right'=>$rightNode]);
+                $this->tokenStream->expect(Token::TYPE_PUNCTUATION, ']');
+            }else{
+                break;
+            }
+        }
+        return $exprNode;
     }
 
     public function parsePrimary()
@@ -249,10 +282,12 @@ class ExpressionParser extends AbstractParser{
                 return $this->parseFunction();
             }
         }
+        //attribute eg: $x | $x.varName | $x.func(1,2) | $x["y"]
+        if($this->tokenStream->test(Token::TYPE_VARIABLE)){
+            return $this->parseAttributeOrMethod();
+        }
         $token=$this->tokenStream->next();
         switch($token->getType()){
-            case Token::TYPE_VARIABLE:
-                return new VarNode($token);
             case Token::TYPE_NUMBER:
             case Token::TYPE_STRING:
                 return new ConstantNode($token);

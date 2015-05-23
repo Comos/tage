@@ -21,11 +21,33 @@ abstract class AbstractTemplate
     /**
      * 
      * @param Context $context
-     * @return \Tage\Runtime\AbstractTemplate
+     * @return \Comos\Tage\Runtime\AbstractTemplate
      */
     public function setContext($context)
     {
         $this->__c = $context;
         return $this;
+    }
+
+    protected function callMethod($obj,$funcName,$funcArgs)
+    {
+        if(empty($obj)){
+            return $obj;
+        }
+        if(is_object($obj) && method_exists($obj,$funcName)){
+            return $obj->$funcName($funcArgs);
+        }
+        return NULL;
+    }
+
+    protected function getAttribute($obj,$attrName)
+    {
+        if(empty($obj)){
+            return $obj;
+        }
+        if($attrName !== NULL && isset($obj[$attrName]) ){
+            return $obj[$attrName];
+        }
+        return NULL;
     }
 }
