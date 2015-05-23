@@ -41,7 +41,7 @@ class Lexer
             range('a','z'),range('A','Z'),array('_')
         );
         self::$NAME_CHARS = array_merge(
-            self::$NAME_HEAD_CHARS,range('0','9')
+            self::$NAME_HEAD_CHARS,str_split('0123456789')
         );
         //$var.name func() func(p1,p2)
         self::$PUNCTUATIONS = str_split('()[]{}.,|');

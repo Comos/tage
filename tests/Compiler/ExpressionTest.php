@@ -69,6 +69,11 @@ class ExpressionTest extends TageTestCase
             ['$x.y()','$this->callMethod(($x),"y",array())'],
             ['$x.y.z($a)','$this->callMethod($this->getAttribute(($x),"y"),"z",array(($a)))'],
             ['$x["y"].z($a)','$this->callMethod($this->getAttribute(($x),("y")),"z",array(($a)))'],
+
+            //filter
+            ['$x|func1|func2','func2(func1(($x)))'],
+            ['$x|func','func(($x))'],
+            ['$x|func:$y:$z','func(($x),($y),($z))'],
         ];
     }
 

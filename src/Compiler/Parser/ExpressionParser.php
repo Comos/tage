@@ -11,6 +11,7 @@ use Comos\Tage\Compiler\Node\Expression\Operand\ArrayNode;
 use Comos\Tage\Compiler\Node\Expression\Operand\AttributeNameNode;
 use Comos\Tage\Compiler\Node\Expression\Operand\AttributeNode;
 use Comos\Tage\Compiler\Node\Expression\Operand\ConstantNode;
+use Comos\Tage\Compiler\Node\Expression\Operand\FilterNode;
 use Comos\Tage\Compiler\Node\Expression\Operand\FunctionNode;
 use Comos\Tage\Compiler\Node\Expression\Operand\MethodNode;
 use Comos\Tage\Compiler\Node\Expression\Operand\VarNode;
@@ -141,9 +142,8 @@ class ExpressionParser extends AbstractParser{
      * use precedence climbing
      * http://blog.fengwang.org.cn/2015/05/14/%E4%BD%BF%E7%94%A8%E9%80%92%E5%BD%92%E4%B8%8B%E9%99%8D%E5%88%86%E6%9E%90%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%91%E5%9B%9B/
      */
-    public function parseExp($precedence)
+    public function parseExp($precedence,$parseFilter=true)
     {
-        //TODO add dot syntax and filter
         $exp=$this->parsePrimary();
         while($this->inBinaryOperator($this->tokenStream->lookNext())
             && $this->getOperatorConf(self::OPERATOR_TYPE_BINARY,$this->tokenStream->lookNext()->getValue())['precedence']>=$precedence ){
@@ -152,7 +152,28 @@ class ExpressionParser extends AbstractParser{
             $right=$this->parseExp($opConf['associativity']==self::ASSOCIATIVITY_L2R?$opConf['precedence']+1:$opConf['precedence']);
             $exp = $this->makeBinaryNode($opToken, $exp, $right);
         }
-        return $this->parseTernary($exp);
+        return $this->parseTernary($this->parseFilter($exp,$parseFilter));
+    }
+
+    public function parseFilter($exp,$parseFilter)
+    {
+        if(!$parseFilter){
+            return $exp;
+        }
+        while(!$this->tokenStream->isEOF()){
+            if(!$this->tokenStream->test(Token::TYPE_PUNCTUATION,'|')){
+                break;
+            }
+            $this->tokenStream->next();
+            $funcNameToken=$this->tokenStream->expect(Token::TYPE_NAME);
+            $argNodes=[$exp];
+            while($this->tokenStream->test(Token::TYPE_OPERATOR,':')){
+                $this->tokenStream->next();
+                $argNodes[] = $this->parseExp(0, false);
+            }
+            $exp=new FilterNode(['filterName'=>$funcNameToken],$argNodes);
+        }
+        return $exp;
     }
 
     /**
@@ -182,7 +203,7 @@ class ExpressionParser extends AbstractParser{
     public function parseBracket()
     {
         $this->tokenStream->next();
-        $node = $this->parseExp(0);
+        $node = $this->parseExp(0,true);
         $this->tokenStream->expect(Token::TYPE_PUNCTUATION, ')');
         return $node;
     }
